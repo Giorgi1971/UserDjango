@@ -48,7 +48,7 @@ def register(request):
         user_form = UserCreateForm(data=request.POST)
         if user_form.is_valid():
             user = user_form.save()
-            user.set_password(request.POST['password'])
+            # user.set_password(request.POST['password'])
             user.save()
             return HttpResponseRedirect(reverse('account:login'))
 
