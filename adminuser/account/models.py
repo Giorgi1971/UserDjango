@@ -1,4 +1,3 @@
-from sre_constants import SUCCESS
 from django.db import models
 from django.contrib.auth.models import User
 
