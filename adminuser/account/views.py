@@ -15,6 +15,7 @@ def logout_view(request):
 def ddd(request):
     return render(request, 'account/ddd.html')
 
+@login_required
 def ttt(request):
     return render(request, 'account/ttt.html')
 
@@ -47,7 +48,7 @@ def register(request):
         user_form = UserCreateForm(data=request.POST)
         if user_form.is_valid():
             user = user_form.save()
-            # user.set_password(user.password1)
+            user.set_password(request.POST['password'])
             user.save()
             return HttpResponseRedirect(reverse('account:login'))
 

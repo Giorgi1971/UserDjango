@@ -1,6 +1,3 @@
-
-
-
 from django.contrib.auth.models import User
 from django import forms
 from django.db.models.base import Model
@@ -10,7 +7,6 @@ from django.forms import EmailField, CharField, IntegerField, DateInput, DateTim
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth import password_validation
 from django.core.exceptions import ValidationError
-
 
 
 class UserCreateForm(forms.ModelForm):
@@ -39,7 +35,6 @@ class UserCreateForm(forms.ModelForm):
             'last_name': Input(attrs={'placeholder': 'Enter Surname'}),
         }
 
-
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
@@ -60,7 +55,6 @@ class UserCreateForm(forms.ModelForm):
                 password_validation.validate_password(password, self.instance)
             except ValidationError as error:
                 self.add_error('password2', error)
-
 
     def save(self, commit=True):
         user = super().save(commit=False)
