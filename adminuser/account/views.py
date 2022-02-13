@@ -10,7 +10,7 @@ from django.urls import reverse
 @login_required
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('account:login'))
+    return HttpResponseRedirect(reverse('login'))
 
 def ddd(request):
     return render(request, 'account/ddd.html')
@@ -48,7 +48,6 @@ def register(request):
         user_form = UserCreateForm(data=request.POST)
         if user_form.is_valid():
             user = user_form.save()
-            # user.set_password(request.POST['password'])
             user.save()
             return HttpResponseRedirect(reverse('account:login'))
 
