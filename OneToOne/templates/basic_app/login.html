@@ -1,5 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-Login
+
+{% if messages %}
+{{messages}}
+{% endif %}
+
+<form action="" method="POST">
+    {%csrf_token%}
+    <input type="text" name='username' placeholder="Enter Username">
+    <input type="password" name="password">
+    <input type="submit" value="Login">
+</form>
+
+
 {% endblock %}
