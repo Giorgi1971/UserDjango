@@ -1,0 +1,15 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+
+<h1>
+    Delete {{ post.title }}?
+
+</h1>
+<form method="POST">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="Delete">
+    <a href="{% url 'post:post' pk=post.pk %}">Cancel</a>
+
+</form>
+{% endblock %}
