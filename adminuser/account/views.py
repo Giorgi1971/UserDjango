@@ -10,7 +10,7 @@ from django.urls import reverse
 @login_required
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('login'))
+    return HttpResponseRedirect(reverse('account:login'))
 
 def ddd(request):
     return render(request, 'account/ddd.html')
