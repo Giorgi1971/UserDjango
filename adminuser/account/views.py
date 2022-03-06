@@ -12,13 +12,6 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('account:login'))
 
-def ddd(request):
-    return render(request, 'account/ddd.html')
-
-@login_required
-def ttt(request):
-    return render(request, 'account/ttt.html')
-
 
 def index(request):
     return render(request, 'account/index.html')
@@ -33,10 +26,10 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return HttpResponseRedirect(reverse('account:ttt'))
+            return HttpResponseRedirect(reverse('posts:user_page'))
         else:
             # Return an 'invalid login' error message.
-            return HttpResponseRedirect(reverse('account:ddd'))
+            return HttpResponseRedirect(reverse('posts:ddd'))
             ...
     return render(request, 'account/login.html')
 

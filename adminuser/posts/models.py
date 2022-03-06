@@ -13,6 +13,9 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(default=datetime.now())
 
+    def __str__(self) -> str:
+        return self.title
+
 
 class twitter(models.Model):
     follow = models.ForeignKey(User, on_delete=models.PROTECT, related_name='follow')

@@ -1,0 +1,20 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<div class="row">
+    <form method="get" action="{% url 'posts:posts' %}">
+        <input id="search_post" type="text" name="phrase" value="{{ request.GET.phrase }}">
+        <label for="search_post"></label>
+        <button class="create-button" type="submit" name="action">პოსტის ძებნა ფრაზით</button>
+    </form>
+</div>
+<h1>
+    Posts:
+</h1>
+{% for item in post_list %}
+<p>
+    <b>{{item}}</b> - date: {{item.created}} - <i>Author</i>: {{item.author}}
+</p>
+{%endfor%}
+
+{% endblock %}

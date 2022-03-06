@@ -12,15 +12,15 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="{% url 'account:index' %}">Index</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url 'posts:posts' %}">Posts</a>
+                </li>
                 {% if user.is_authenticated %}
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url 'account:logout' %}">Logout</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'account:posts' %}">Posts</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'account:ttt' %}">{{ user }}</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'posts:user_page' %}">{{ user }}</a>
                 </li>
                 {% else %}
                 <li class="nav-item">
