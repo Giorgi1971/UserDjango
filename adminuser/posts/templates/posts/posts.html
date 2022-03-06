@@ -1,0 +1,10 @@
+{% extends 'account/base.html' %}
+
+{% block content %}
+<h1>
+    Posts:
+</h1>
+{% for item in list %}
+{{item}}
+{%endif%}
+{% endblock %}
