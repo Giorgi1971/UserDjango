@@ -6,6 +6,9 @@ app_name = 'posts'
 urlpatterns = [
     path('', home, name='home'),
     path('posts/', PostListView.as_view(), name='posts'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post'),
+    
+    path('follow/', follow_unique, name='follow'),
 
     path('post/new/', PostCreateView.as_view(), name='create_post'),
 

@@ -22,11 +22,39 @@
         </div>
     </center>
 <h1>
-    Posts:
+    Posts: 
+    {% if message %}
+    {{ message }}
+    {% endif %}
+
 </h1>
 {% for item in post_list %}
+
+<div class="card text-center">
+    <div class="card-header">
+        <a href="{% url 'posts:post' item.pk %}">
+        {{item.author}}
+    </a>
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">{{item}}</h5>
+      <p class="card-text">date: {{item.created}}.</p>
+
+      <form action="{% url 'posts:follow' %}" method="POST">
+          {% csrf_token %}
+          <input type="hidden" name="follow" value="{{item.author.pk}}">
+          <input class="btn btn-secondary" type="submit" value="Follow">
+      </form>
+     <h2>
+        {{item.author.pk}}
+     </h2>
+    </div>
+    <div class="card-footer text-muted">
+        Followed by <b>{{item.author.follow.count}}</b> user.
+    </div>
+  </div>
 <p>
-    <b>{{item}}</b> - date: {{item.created}} - <i>Author</i>: {{item.author}}
+    <b></b> -  - <i>{{item.author}}</i>: 
 </p>
 {%endfor%}
 <div class="pagination">

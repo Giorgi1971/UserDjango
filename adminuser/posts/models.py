@@ -1,3 +1,4 @@
+from enum import unique
 from turtle import title
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -20,3 +21,6 @@ class Post(models.Model):
 class Twitter(models.Model):
     follow = models.ForeignKey(User, on_delete=models.PROTECT, related_name='follow')
     followed = models.ForeignKey(User, on_delete=models.PROTECT, related_name='followed')
+
+    class Meta:
+        unique_together = [['follow', 'followed']]

@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .models import *
@@ -23,9 +24,30 @@ def user_page(request):
     return render(request, 'posts/user_page.html')
 
 
+class PostDetailView(DetailView):
+    model = Post
+
+
+def follow_unique(request):
+    message = ''
+    follow_pk = request.POST['follow']
+    foolowed_pk = request.user.pk
+    post_list = Post.objects.filter(author__pk=follow_pk)
+    if Twitter.objects.filter(follow=follow_pk, followed=foolowed_pk):
+        message = 'Already follower'
+    else:
+        follow = User.objects.get(pk=request.POST['follow'])
+        follower = request.user
+        f1 = Twitter(follow=follow, followed=follower)
+        f1.save()
+    # return HttpResponseRedirect(reverse('posts:posts'))
+    # return HttpResponseRedirect(reverse('posts:posts', kwargs={'message':message}))
+    return render(request, 'posts/post_list.html', {'post_list':post_list, 'message':message})
+
+
 class PostListView(ListView):
     model = Post
-    paginate_by = 2
+    paginate_by = 5
 
     def get_queryset(self):
         phrase_q = Q()
