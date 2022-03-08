@@ -2,6 +2,9 @@
 
 {% block center %}
 
+
+{% if user.is_authenticated %}
+{% if user == post.author %}
 <h1>
     Delete {{ post.title }}?
 
@@ -9,7 +12,15 @@
 <form method="POST">
     {% csrf_token %}
     <input class="btn btn-danger" type="submit" value="Delete">
+    <a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
     <a class="btn btn-warning" href="{% url 'posts:post' pk=post.pk %}">Cancel</a>
-
 </form>
+{% else %}
+<h2 class="text-danger ml-auto">
+    You haven't Pemishen Delete other's Post!
+
+</h2>
+{% endif %}
+{% endif %}
+
 {% endblock %}

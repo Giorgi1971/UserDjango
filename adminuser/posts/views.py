@@ -22,10 +22,7 @@ def ddd(request):
 @login_required
 def user_page(request):
     i = request.user.pk
-    print(i)
-    print(request.user)
     p = Post.objects.filter(author__pk=i)
-    print(p)
     return render(request, 'posts/user_page.html', {'post_list':p})
 
 
@@ -69,10 +66,10 @@ def post_add(request):
     if request.method == 'POST':
         if request.user.is_staff:
             form = PostModelForm(request.POST, request.FILES)
-            print(form)
+            # print(form)
             if form.is_valid():
                 postm = form.save(commit=False)
-                print(postm)
+                # print(postm)
                 # postm.author = request.user.id
                 postm.author = User.objects.get(pk=request.user.pk)
                 postm.save()
