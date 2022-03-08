@@ -1,29 +1,26 @@
 {% extends 'account/base.html' %}
 
-{% block content %}
+{% block center %}
 
 <h2>
     Author detail Page!
 </h2>
-<div class="jumbotron">
     <h4 class="card-title">{{ post.title }}</h4>
         <div class="card" style="width:300px">
           <img class="card-img-top" src="{{ post.image.url }}" alt="Card image" style="width:100%">
           <div class="card-body">
-            <p class="card-text">title: {{ post.title }}</p>
             <p class="card-text">text: {{ post.text }}</p>
-            <p class="card-text">create Date: {{ post.create_date }}</p>
+            <p class="card-text">Created: {{ post.created | date:"SHORT_DATE_FORMAT" }}</p>
           </div>
         </div>
         <br>
         
         <div class="container">
             <p>
-                <a class="btn btn-warning" href="{% url 'post:post_update' pk=post.pk %}">Update</a>
+                <a class="btn btn-warning" href="{% url 'posts:post_update' pk=post.pk %}">Update</a>
          
-                <a class="btn btn-danger" href="{% url 'post:post_delete' pk=post.pk %}">Delete</a>
+                <a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
             </p>
         </div>
         
-    </div>
 {% endblock %}

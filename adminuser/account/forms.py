@@ -31,8 +31,11 @@ class UserCreateForm(forms.ModelForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'password1', 'password2')
         widgets = {
-            'first_name': Input(attrs={'placeholder': 'Enter NName'}),
-            'last_name': Input(attrs={'placeholder': 'Enter Surname'}),
+            'username': Input(attrs={'class':"form-control", 'placeholder': 'Enter Username'}),
+            'first_name': Input(attrs={'class':"form-control", 'placeholder': 'Enter NName'}),
+            'last_name': Input(attrs={'class':"form-control", 'placeholder': 'Enter Surname'}),
+            'password1': Input(attrs={'class':'form-control'}),
+            'password2': Input(attrs={'class':"form-control"}),
         }
 
     def clean_password2(self):

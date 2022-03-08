@@ -18,6 +18,7 @@ class Post(models.Model):
         return self.title
 
 
+
 class Twitter(models.Model):
     follow = models.ForeignKey(User, on_delete=models.PROTECT, related_name='follow')
     followed = models.ForeignKey(User, on_delete=models.PROTECT, related_name='followed')

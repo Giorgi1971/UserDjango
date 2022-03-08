@@ -1,14 +1,15 @@
 {% extends 'account/base.html' %}
-{% block content %}
 
-<h2>
-    Register Gio
+{% block center %}
+
+<h2 style="padding: 30px;">
+    Login:
 </h2>
-
 <form method="POST">
     {%csrf_token%}
-    <input type="text" name="username">
-    <input type="password" name="password" >
-    <input type="submit" value="Submit">
+    <input class="form-control" type="text" name="username"><br>
+    <input class="form-control" type="password" name="password"><br>
+    <input class="form-control" type="submit" value="Login"><br>
 </form>
+
 {% endblock %}

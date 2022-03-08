@@ -21,7 +21,12 @@ def ddd(request):
 
 @login_required
 def user_page(request):
-    return render(request, 'posts/user_page.html')
+    i = request.user.pk
+    print(i)
+    print(request.user)
+    p = Post.objects.filter(author__pk=i)
+    print(p)
+    return render(request, 'posts/user_page.html', {'post_list':p})
 
 
 class PostDetailView(DetailView):
@@ -84,7 +89,7 @@ class PostCreateView(CreateView):
 
 # აქ გვინდა რომ მხოლოდ პოსტის ავტორს შეეძლოს მოხვედრა
 class PostUpdateView(UpdateView):
-    fields = '__all__'
+    fields = ('title',)
     model = Post
 
 

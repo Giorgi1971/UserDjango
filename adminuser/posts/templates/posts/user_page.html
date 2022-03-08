@@ -1,15 +1,36 @@
 {% extends 'account/base.html' %}
 
 
-{% block content %}
+{% block center %}
 
 <h1>
     User's own Posts:
 </h1>
-{% for item in post_list %}
-<p>
-    <b>{{item}}</b> - date: {{item.created}} - <i>Author</i>: {{item.author}}
-</p>
-{%endfor%}
 
-{% endblock %}
+{% for post in post_list %}
+    <h2>{{ post.title | title }}</h2>
+    <div class="author-div">
+        <i class="bi bi-person-circle"></i>
+        <a href=""> - {{ post.author | title }} - </a>Published Date:
+        <span>{{ post.created | date:"SHORT_DATE_FORMAT" }}</span>
+    </div><br>
+    <div class="categories">
+        <a href="{% url 'posts:post_delete' post.pk %}" class="single-category btn btn-danger">
+            Delete Post!
+        </a>
+        <a href="{% url 'posts:post_update' post.pk %}" class="single-category btn btn-warning">
+            Update Post!
+        </a>
+    </div>
+
+
+
+
+    <p>
+        <b>{{post}}</b> - date: {{post.created}} - <i>Author</i>: {{post.author}}
+    </p>
+<br><hr><hr><br>
+
+    {%endfor%}
+
+    {% endblock %}
