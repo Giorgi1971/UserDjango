@@ -1,6 +1,8 @@
-from django.http import HttpResponseRedirect
+from pyexpat import model
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+from flask import request
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -30,10 +32,49 @@ class PostDetailView(DetailView):
     model = Post
 
 
+def following(request, kk):
+    follow = User.objects.get(pk=kk)
+    print(follow)
+    followed = request.user
+    print(followed)
+
+    f1 = Twitter.objects.filter(follow=follow, followed=followed)
+    print(f1)
+    f1.delete()
+    return redirect(reverse("posts:twitter"))
+
+
+def followed(request):
+    i = request.user.pk
+    print(i)
+    f1 = Twitter.objects.filter(followed__pk=i)
+
+    return render(request, 'posts/twitter_list.html', {'twitter_list':f1})
+
+
+class FollowListView(ListView):
+    queryset = Twitter.objects.filter(followed__pk=1)
+    # model = Twitter
+
+
+    # def get_queryset(self):
+    #     user = request.user
+    #     return Twitter.objects.all()
+        # phrase_q = Q()
+        # q = self.request.GET.get('phrase')
+        # qa = self.request.GET.get('qa')
+        # if q:
+        #     phrase_q &= (Q(title__icontains=q) | Q(title__icontains=q) | Q(title__icontains=q))
+        # if qa:
+        #     phrase_q &= (Q(author__pk=qa))
+
+
 def follow_unique(request):
     message = ''
     follow_pk = request.POST['follow']
+    print(follow_pk)
     foolowed_pk = request.user.pk
+    (foolowed_pk)
     post_list = Post.objects.filter(author__pk=follow_pk)
     if Twitter.objects.filter(follow=follow_pk, followed=foolowed_pk):
         message = 'Already follower'

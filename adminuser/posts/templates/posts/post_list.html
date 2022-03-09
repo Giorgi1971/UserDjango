@@ -1,80 +1,80 @@
 {% extends 'account/base.html' %}
 
 {% block center %}
-    <!-- აქ სიმბოლურად ვსვავ პოსტის დამატების ღილაკს, სადაც დაგჭირდება იქ გამოვიყენებთ.
+<!-- აქ სიმბოლურად ვსვავ პოსტის დამატების ღილაკს, სადაც დაგჭირდება იქ გამოვიყენებთ.
     ეს ღილაკი გამოუჩნდებათ მარტო მენტორებს, ანუ ვინც იქნება is_staff სტატუსით -->
-            <center style="margin: auto;">
-                {% if user.is_authenticated %}
-                <br>
-                <a class="btn btn-primary px-5" href="{% url 'posts:post_add' %}"><b> Create new Post ... </b></a>
-                <br>
-                {% endif %}
-                <br>
-                <!--------------------------------------ძებნის ღილაკი, თუ გვჭირება, თუ არადა წავშალოთ------------------------------------------------------------>
-                <div class="row">
-                    <form class="d-flex" method="get" action="{% url 'posts:posts' %}">
-                        <input class="form-control me-2" type="search" name="phrase" value="{{ request.GET.phrase }}" placeholder="Search in Posts" aria-label="Search">
-                        <button class="btn btn-outline-success create-button" type="submit" name="action">Search</button>
-                    </form>
-                </div>
-            </center>
-            <h1>
-                Posts:
-                {% if message %}
-                {{ message }}
-                {% endif %}
+<center style="margin: auto;">
+    {% if user.is_authenticated %}
+    <br>
+    <a class="btn btn-primary px-5" href="{% url 'posts:post_add' %}"><b> Create new Post ... </b></a>
+    <br>
+    {% endif %}
+    <br>
+    <!--------------------------------------ძებნის ღილაკი, თუ გვჭირება, თუ არადა წავშალოთ------------------------------------------------------------>
+    <div class="row">
+        <form class="d-flex" method="get" action="{% url 'posts:posts' %}">
+            <input class="form-control me-2" type="search" name="phrase" value="{{ request.GET.phrase }}"
+                placeholder="Search in Posts" aria-label="Search">
+            <button class="btn btn-outline-success create-button" type="submit" name="action">Search</button>
+        </form>
+    </div>
+</center>
+<h1>
+    Posts:
+    {% if message %}
+    {{ message }}
+    {% endif %}
 
-            </h1>
-            {% for item in post_list %}
+</h1>
+{% for item in post_list %}
 
-            <div class="card text-center">
-                <div class="card-header">Author: 
-                    <a href="{% url 'posts:post' item.pk %}">
-                        <b> {{item.author}}.</b> user_pk - {{item.author.pk}}
-                    </a>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Title: {{item}} - post_pk {{item.pk}}</h5>
-                    <p class="card-text">date: {{item.created}}.</p>
+<div class="card">
+    <div class="card-header">
+        <a href="{% url 'posts:post' item.pk %}">{{item.author}} - {{item.author.pk}}</a>
+            <form action="{% url 'posts:follow' %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="follow" value="{{item.author.pk}}">
+                <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
+                <input class="btn btn-secondary" type="submit" value="Follow">
+            </form>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Title: {{item}} - post_pk {{item.pk}}
+        </h5>
+        <p class="card-text">date: {{item.created}}.</p>
 
-                    <form action="{% url 'posts:follow' %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="follow" value="{{item.author.pk}}">
-                        <input class="btn btn-secondary" type="submit" value="Follow">
-                    </form>
-                        
-                </div>
-                <div class="card-footer text-muted">
-                    Followed by <b>{{item.author.follow.count}}</b> user.
-                </div>
-            </div>
-            <p>
-                <b></b> - - <i>{{item.author}}</i>:
-            </p>
-            {%endfor%}
-            <div class="pagination">
-                <span class="step-links">
 
-                    {% if page_obj.has_previous %}
-                    <a href="?page=1">&laquo; პირველი გვერდი</a>
-                    <a href="?page={{ page_obj.previous_page_number }}" class="page-number">
-                        {{ page_obj.previous_page_number }}</a>
-                    {% endif %}
+    </div>
+    <div class="card-footer text-muted">
+        Followed by <b>{{item.author.follow.count}}</b> user.
+    </div>
+</div>
+<p>
+</p>
+{%endfor%}
+<div class="pagination">
+    <span class="step-links">
 
-                    <span class="current">
-                        {{ page_obj.number }}
-                    </span>
+        {% if page_obj.has_previous %}
+        <a href="?page=1">&laquo; პირველი გვერდი</a>
+        <a href="?page={{ page_obj.previous_page_number }}" class="page-number">
+            {{ page_obj.previous_page_number }}</a>
+        {% endif %}
 
-                    {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}" class="page-number">
-                        {{ page_obj.next_page_number }}</a>
-                    <a href="?page={{ page_obj.paginator.num_pages }}">ბოლო გვერდი &raquo;</a>
-                    {% endif %}
+        <span class="current">
+            {{ page_obj.number }}
+        </span>
 
-                </span>
-            </div>
-            <div class="col-3">
-                .
-            </div>
+        {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="page-number">
+            {{ page_obj.next_page_number }}</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">ბოლო გვერდი &raquo;</a>
+        {% endif %}
 
-    {% endblock %}
+    </span>
+</div>
+<div class="col-3">
+    .
+</div>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'account/base.html' %}
+
+
+{% block center %}
+
+
+{% if twitter_list %}
+<h1>
+    User's You Followed:
+</h1>
+
+{% for tt in twitter_list %}
+    <div class="author-div">
+        <i class="bi bi-person-circle"></i> {{ tt.follow }} - pk_{{  tt.follow.pk }} 
+        <a href="{% url 'posts:following' tt.follow.pk %}" class="single-category btn btn-warning">
+            UnFollow
+        </a>
+    </div>
+
+
+<br><hr><hr><br>
+
+    {%endfor%}
+{%else%}
+<h2>
+    No Followed Persons
+
+</h2>
+{%endif%}
+
+    {% endblock %}
