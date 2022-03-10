@@ -1,4 +1,3 @@
-from pyexpat import model
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
@@ -105,17 +104,17 @@ class PostListView(ListView):
 def post_add(request):
     form = PostModelForm()
     if request.method == 'POST':
-        if request.user.is_staff:
+        if request.user:
             form = PostModelForm(request.POST, request.FILES)
             # print(form)
             if form.is_valid():
                 postm = form.save(commit=False)
                 # print(postm)
-                # postm.author = request.user.id
-                postm.author = User.objects.get(pk=request.user.pk)
+                postm.author = request.user
+                # postm.author = User.objects.get(pk=request.user.pk)
                 postm.save()
                 # კარგია თუ დამამახსოვრდება, სხვა დროსაც დამჭირდება
-                form.save_m2m()
+                # form.save_m2m()
                 return redirect(reverse("posts:posts"))
     return render(request, 'posts/post_form.html', {'form':form})
 

@@ -1,6 +1,7 @@
 {% extends 'account/base.html' %}
 
 {% block center %}
+<div class="row">
 <!-- აქ სიმბოლურად ვსვავ პოსტის დამატების ღილაკს, სადაც დაგჭირდება იქ გამოვიყენებთ.
     ეს ღილაკი გამოუჩნდებათ მარტო მენტორებს, ანუ ვინც იქნება is_staff სტატუსით -->
 <center style="margin: auto;">
@@ -11,7 +12,6 @@
     {% endif %}
     <br>
     <!--------------------------------------ძებნის ღილაკი, თუ გვჭირება, თუ არადა წავშალოთ------------------------------------------------------------>
-    <div class="row">
         <form class="d-flex" method="get" action="{% url 'posts:posts' %}">
             <input class="form-control me-2" type="search" name="phrase" value="{{ request.GET.phrase }}"
                 placeholder="Search in Posts" aria-label="Search">
@@ -79,9 +79,6 @@
         {% endif %}
 
     </span>
-</div>
-<div class="col-3">
-    .
 </div>
 
 {% endblock %}

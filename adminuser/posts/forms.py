@@ -4,8 +4,6 @@ from .models import Post
 from django.forms.widgets import Input
 
 
-
-
 class PostModelForm(forms.ModelForm):
     class Meta:
         model = Post
