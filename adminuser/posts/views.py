@@ -89,7 +89,7 @@ def follow_unique(request):
 
 class PostListView(ListView):
     model = Post
-    paginate_by = 5
+    paginate_by = 2
 
     def get_queryset(self):
         phrase_q = Q()

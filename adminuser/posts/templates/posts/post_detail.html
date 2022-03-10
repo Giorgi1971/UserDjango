@@ -16,7 +16,7 @@
           </div>
         </div>
         <br>
-        
+        {% if request.user == post.author %}
         <div class="container">
             <p>
                 <a class="btn btn-warning" href="{% url 'posts:post_update' pk=post.pk %}">Update</a>
@@ -25,4 +25,6 @@
             </p>
         </div>
         
+{% endif %}
+
 {% endblock %}
