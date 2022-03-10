@@ -29,7 +29,7 @@
     {% endif %}
 </h2>
 
-{% for item in post_list %}
+{% for item in page_obj %}
 
 <div class="card">
     <div class="card-header text-secondary">
@@ -48,11 +48,12 @@
     </div>
     <div class="card-body">
         <a class="link-secondary" href="{% url 'posts:post' item.pk %}">
-        <h5 class="card-title">Title: {{item}} - post_pk {{item.pk}} </h5>
-    </a>
+        <h5 class="card-title">Title: {{item}} - post_pk {{item.pk}} </h5></a>
+
         {% if item.image %}
         <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:70%">
         {% endif %}
+        
         <p class="card-text">Text: {{item.text}}</p>
         <p class="card-text">Created date: {{item.created}}.</p>
 
