@@ -127,7 +127,7 @@ class PostCreateView(CreateView):
 
 # აქ გვინდა რომ მხოლოდ პოსტის ავტორს შეეძლოს მოხვედრა
 class PostUpdateView(UpdateView):
-    fields = ('title',)
+    fields = ('title', 'text', 'image')
     model = Post
 
 
