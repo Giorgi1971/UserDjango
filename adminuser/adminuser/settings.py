@@ -116,7 +116,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-
+LOGIN_URL="/user/login/"
 LOGIN_REDIRECT_URL = BASE_DIR / 'account/index'
 
 # Static files (CSS, JavaScript, Images)

@@ -9,8 +9,7 @@ from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from .forms import *
 from django.contrib.auth.models import User
-
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 def home(request):
     return render(request, 'posts/home.html')
@@ -51,21 +50,12 @@ def followed(request):
     return render(request, 'posts/twitter_list.html', {'twitter_list':f1})
 
 
-class FollowListView(ListView):
-    queryset = Twitter.objects.filter(followed__pk=1)
-    # model = Twitter
+class FollowListView(LoginRequiredMixin, ListView):
+    login_url = '/user/login/'
+    template_name = 'posts/follow_list.html'
 
-
-    # def get_queryset(self):
-    #     user = request.user
-    #     return Twitter.objects.all()
-        # phrase_q = Q()
-        # q = self.request.GET.get('phrase')
-        # qa = self.request.GET.get('qa')
-        # if q:
-        #     phrase_q &= (Q(title__icontains=q) | Q(title__icontains=q) | Q(title__icontains=q))
-        # if qa:
-        #     phrase_q &= (Q(author__pk=qa))
+    def get_queryset(self):
+        return Twitter.objects.filter(follow=self.request.user)
 
 
 def follow_unique(request):

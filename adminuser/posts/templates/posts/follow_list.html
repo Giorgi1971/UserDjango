@@ -6,14 +6,14 @@
 
 {% if twitter_list %}
 <h1>
-    Users I Follow:
+    User's Who Followed Me:
 </h1>
-<br>
+
 {% for tt in twitter_list %}
     <div class="author-div">
-        <i class="bi bi-person-circle"></i> {{ tt.follow }} - pk_{{  tt.follow.pk }} 
+        <i class="bi bi-person-circle"></i> {{ tt.followed }} - pk_{{  tt.followed.pk }} 
         <a href="{% url 'posts:following' tt.follow.pk %}" class="single-category btn btn-warning">
-            UnFollow
+            Delete Follower!
         </a>
     </div>
 
