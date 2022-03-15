@@ -63,8 +63,9 @@ def follow_unique(request):
     follow_pk = request.POST['follow']
     print(follow_pk)
     foolowed_pk = request.user.pk
-    (foolowed_pk)
+    print(foolowed_pk)
     post_list = Post.objects.filter(author__pk=follow_pk)
+    print(post_list)
     if Twitter.objects.filter(follow=follow_pk, followed=foolowed_pk):
         message = 'Already follower'
     else:
@@ -72,9 +73,8 @@ def follow_unique(request):
         follower = request.user
         f1 = Twitter(follow=follow, followed=follower)
         f1.save()
-    # return HttpResponseRedirect(reverse('posts:posts'))
-    # return HttpResponseRedirect(reverse('posts:posts', kwargs={'message':message}))
-    return render(request, 'posts/post_list.html', {'post_list':post_list, 'message':message})
+        message = f'follow {follow} follower'
+    return render(request, 'posts/post_list.html', {'page_obj':post_list, 'message':message})
 
 
 class PostListView(ListView):
