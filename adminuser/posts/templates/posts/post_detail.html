@@ -3,7 +3,7 @@
 {% block center %}
 
 <h2>
-    Author detail Page!
+    Post detail Page!
 </h2>
     <h4 class="card-title">{{ post.title }}</h4>
         <div class="card" style="width:300px">
@@ -11,7 +11,9 @@
           <img class="card-img-top" src="{{ post.image.url }}" alt="Card image" style="width:100%">
           {% endif %}
           <div class="card-body">
-            <p class="card-text">text: {{ post.text }}</p>
+            <p class="card-text">Text:</p>
+            <p class="card-text">{{ post.text }}</p>
+            
             <p class="card-text">Created: {{ post.created | date:"SHORT_DATE_FORMAT" }}</p>
           </div>
         </div>

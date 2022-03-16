@@ -75,15 +75,15 @@
     <ul class="pagination justify-content-center">
         {% if page_obj.has_previous %}
 
-      <li class="page-item "><a class="page-link link-dark" href="?page=1">&laquo; First</a></li>
-      <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
+      <li class="page-item "><a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page=1">&laquo; First</a></li>
+      <li class="page-item"><a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a></li>
       {% endif %}
 
       <li class="page-item"><a class="page-link link-success" href="#"><b>{{ page_obj.number }}</b></a></li>
 
       {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
-      <li class="page-item"><a class="page-link link-dark" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+      <li class="page-item"><a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a></li>
+      <li class="page-item"><a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
       {% endif %}
     </ul>
 </nav>

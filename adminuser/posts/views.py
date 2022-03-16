@@ -86,7 +86,7 @@ class PostListView(ListView):
         q = self.request.GET.get('phrase')
         qa = self.request.GET.get('qa')
         if q:
-            phrase_q &= (Q(title__icontains=q) | Q(title__icontains=q) | Q(title__icontains=q))
+            phrase_q &= (Q(title__icontains=q) | Q(text__icontains=q) | Q(title__icontains=q))
         if qa:
             phrase_q &= (Q(author__pk=qa))
         return Post.objects.filter(phrase_q).order_by('-pk')

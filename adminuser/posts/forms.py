@@ -10,5 +10,5 @@ class PostModelForm(forms.ModelForm):
         fields = ['title', 'text', 'image']
         widgets = {
             'title': Input(attrs={'class':"form-control", 'placeholder': 'Title'}),
-            'text': forms.Textarea(attrs={'class':"form-control"}),
+            'text': forms.Textarea(attrs={'class':"form-control", 'placeholder': 'Teext'}),
         }
