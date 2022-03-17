@@ -1,3 +1,4 @@
+from itertools import count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
@@ -10,6 +11,9 @@ from django.urls import reverse_lazy, reverse
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
+
+
 
 def home(request):
     return render(request, 'posts/home.html')
@@ -64,7 +68,7 @@ def follow_unique(request):
     print(follow_pk)
     foolowed_pk = request.user.pk
     print(foolowed_pk)
-    post_list = Post.objects.filter(author__pk=follow_pk)
+    post_list = Post.objects.filter(author__pk=follow_pk).order_by()
     print(post_list)
     if Twitter.objects.filter(follow=follow_pk, followed=foolowed_pk):
         message = 'Already follower'
@@ -89,7 +93,10 @@ class PostListView(ListView):
             phrase_q &= (Q(title__icontains=q) | Q(text__icontains=q) | Q(title__icontains=q))
         if qa:
             phrase_q &= (Q(author__pk=qa))
-        return Post.objects.filter(phrase_q).order_by('-pk')
+        p1 = Post.objects.filter(phrase_q).annotate(tt=Count('author__followed'))
+        for i in p1:
+            print(i.tt)
+        return p1.order_by('-pk')
 
 def post_add(request):
     form = PostModelForm()

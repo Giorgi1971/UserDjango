@@ -15,10 +15,13 @@ class Post(models.Model):
     created = models.DateTimeField(default=datetime.now())
 
     def __str__(self) -> str:
-        return self.title
+        return self.title + ' - ' + str(self.author.pk)+ ' - ' + str(self.pk)
 
     def get_absolute_url(self):
         return reverse('posts:user_page')
+    
+    class Meta:
+        ordering = ['-created']
 
 
 class Twitter(models.Model):
