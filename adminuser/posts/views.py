@@ -1,4 +1,7 @@
 from itertools import count
+from statistics import mode
+from tkinter import TkVersion
+from tkinter.messagebox import QUESTION
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
@@ -29,7 +32,30 @@ def user_page(request):
     p = Post.objects.filter(author__pk=i)
     return render(request, 'posts/user_page.html', {'post_list':p})
 
+from django.views.generic import TemplateView
 
+
+class ExampleListView(LoginRequiredMixin, ListView):
+    # model = Post
+    # extra_context={'title': 'Custom Title'}
+    # # ქვერისეთი რა სახელით იქნება ტემპლატში
+    context_object_name = 'list'
+    template_name = 'posts/example2.html'
+    # # თუ გვინდა რომ სხვა ობიექტის სია მოგვცეს
+    # queryset  = User.objects.all()
+     
+    # def get_queryset(self):
+    #     return Twitter.objects.filter(followed=self.request.user)
+
+    # ახალი ვარიანტი
+    def get_queryset(self):
+        qf = Twitter.objects.filter(followed=self.request.user) # .annotate(tt=(follow__post_set=))
+        print(qf)
+        return qf
+
+
+
+# ცალკეული პოსტის ნახვა, თუ ავტორი ნახულობს აქვს რედაქტირების საშუალება
 class PostDetailView(DetailView):
     model = Post
 
@@ -54,12 +80,14 @@ def followed(request):
     return render(request, 'posts/twitter_list.html', {'twitter_list':f1})
 
 
+
 class FollowListView(LoginRequiredMixin, ListView):
     login_url = '/user/login/'
     template_name = 'posts/follow_list.html'
 
     def get_queryset(self):
         return Twitter.objects.filter(follow=self.request.user)
+
 
 
 def follow_unique(request):
@@ -81,6 +109,7 @@ def follow_unique(request):
     return render(request, 'posts/post_list.html', {'page_obj':post_list, 'message':message})
 
 
+# პოსტების დაბრუნება, მათ შორის გაფილტრულისაც სათაურით და ტექსტსტით.
 class PostListView(ListView):
     model = Post
     paginate_by = 2
@@ -93,9 +122,8 @@ class PostListView(ListView):
             phrase_q &= (Q(title__icontains=q) | Q(text__icontains=q) | Q(title__icontains=q))
         if qa:
             phrase_q &= (Q(author__pk=qa))
-        p1 = Post.objects.filter(phrase_q).annotate(tt=Count('author__followed'))
-        for i in p1:
-            print(i.tt)
+        print(self.request.user.pk)
+        p1 = Post.objects.filter(phrase_q) #.filter(author__followed__pk=self.request.user.pk)
         return p1.order_by('-pk')
 
 def post_add(request):

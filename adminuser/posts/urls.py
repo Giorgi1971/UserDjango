@@ -8,6 +8,8 @@ urlpatterns = [
     path('posts/', PostListView.as_view(), name='posts'),
     path('post/<int:pk>/', PostDetailView.as_view(), name='post'),
     
+    path('example/', ExampleListView.as_view(), name='example'),
+
     path('follow/', follow_unique, name='follow'),
     path('following/<int:kk>/', following, name='following'),
     path('twitter/', FollowListView.as_view(), name='twitter'),
