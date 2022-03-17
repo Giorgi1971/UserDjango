@@ -11,10 +11,8 @@
 <h3>
     List:
 </h3>
-{% for i in list %}
+{% for item in list %}
 
-{{i.follow.post_set.all }}
-{% for item in i.follow.post_set.all %}
     <div class="card">
         <div class="card-header text-secondary">
             <h4>
@@ -50,7 +48,6 @@
     </div>
     
 
-{% endfor %}
 {% endfor %}
 
 

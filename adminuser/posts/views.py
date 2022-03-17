@@ -51,7 +51,15 @@ class ExampleListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         qf = Twitter.objects.filter(followed=self.request.user) # .annotate(tt=(follow__post_set=))
         print(qf)
-        return qf
+        tt = []
+        for i in qf:
+            p = i.follow.post_set.all()
+            tt.extend(p)
+        print(tt)
+        tk = [i.pk for i in tt]
+        print(tk)
+        querset = Post.objects.filter(id__in=tk)
+        return querset.order_by('?')
 
 
 
