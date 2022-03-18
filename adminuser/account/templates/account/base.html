@@ -16,6 +16,7 @@
     <div class="container">
         {% include 'account/navbar.html' %}
         <div class="row">
+            <!-- გვერდის მარცხენა მხარე. დამატებითი მენიუ: followed, following, user personal page... -->
             <div class="col-3">
                 <div class="container">
                     {% block left %}
@@ -25,24 +26,30 @@
                         </b>
                     </h1>
                     <a href="{% url 'posts:twitter' %}">
-                        <div class='d-flex p-2 m-3 border border-5 border-primary rounded-pill bd-highlight shadow'>
-                            <i class="bi-shop px-2"></i><i>Home</i>
+                        <div class='btn d-flex p-2 m-3 border border-5 border-primary rounded-pill bd-highlight shadow'>
+                            <i class="bi-shop px-2"></i>Followers
                         </div>
                     </a>
                     <a href="{% url 'posts:followed' %}">
-                        <div class='d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
+                        <div class='btn d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
                             <i class="bi-alarm px-2"></i>Following
                         </div>
                     </a>
-                    <div class='d-flex p-2 m-3 border border-5 border-success rounded-pill bd-highlight shadow'>
-                        <i class="bi-exclamation-triangle px-2"></i> Explore
-                    </div>
-                    <div class='d-flex p-2 m-3 border border-5 border-warning rounded-pill bd-highlight shadow'>
-                        <i class="bi-github px-2"></i>Messages
-                    </div>
-                    <div class='d-flex p-2 m-3 border border-5 border-info rounded-pill bd-highlight shadow'>
-                        <i class="bi-alarm px-2"></i>Lists
-                    </div>
+                    <a href="{% url 'posts:user_info' request.user.pk %}">
+                        <div class='btn d-flex p-2 m-3 border border-5 border-success rounded-pill bd-highlight shadow'>
+                            <i class="bi-exclamation-triangle px-2"></i> Personal info
+                        </div>
+                    </a>
+                    <a href="{% url 'posts:user_page' %}">
+                        <div class='btn d-flex p-2 m-3 border border-5 border-warning rounded-pill bd-highlight shadow'>
+                            <i class="bi-github px-2"></i>Messages
+                        </div>
+                    </a>
+                    <a href="{% url 'posts:user_page' %}">
+                        <div class='btn d-flex p-2 m-3 border border-5 border-info rounded-pill bd-highlight shadow'>
+                            <i class="bi-alarm px-2"></i>Lists
+                        </div>
+                    </a>
                     <a href="{% url 'posts:user_page' %}">
                         <div class='btn d-flex p-2 m-3 border border-5 border-dark rounded-pill bd-highlight shadow'>
                             <i class="bi-volume-mute-fill px-2"></i></i> Profile
@@ -78,14 +85,14 @@
                     </h3>
                     {% for u in links %}
                     <div class="list-group">
-                            <a class="list-group-item list-group-item-action" href="#"> {{ u.username }}
+                        <a class="list-group-item list-group-item-action" href="#"> {{ u.username }}
                             <form class="d-inline-block" action="{% url 'posts:follow' %}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="follow" value="{{ u.pk }}">
                                 <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
                                 <input class="btn btn-sm btn-secondary" type="submit" value="Follow">
                             </form>
-                            </a>
+                        </a>
                         <a href="#" class="list-group-item list-group-item-action"></a>
                         {% endfor %}
                         <br>

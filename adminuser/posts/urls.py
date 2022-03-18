@@ -24,6 +24,8 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
 
     path('user_page/', user_page, name='user_page'),
+    path('user_info/<int:pk>', PersonalDetailView.as_view(), name='user_info'),
+
     path('ddd/', ddd, name='ddd'),
 
     # path('categories/', CategoryListView.as_view(), name='categories'),

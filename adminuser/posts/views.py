@@ -1,4 +1,5 @@
 from itertools import count
+from pyexpat import model
 from statistics import mode
 from tkinter import TkVersion
 from tkinter.messagebox import QUESTION
@@ -14,8 +15,6 @@ from django.urls import reverse_lazy, reverse
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
-
 
 
 def home(request):
@@ -25,14 +24,16 @@ def home(request):
 def ddd(request):
     return render(request, 'posts/ddd.html')
 
+class PersonalDetailView(DetailView):
+    model = get_user_model()
+    template_name = 'account/personal_info.html'
+
 
 @login_required
 def user_page(request):
     i = request.user.pk
     p = Post.objects.filter(author__pk=i)
     return render(request, 'posts/user_page.html', {'post_list':p})
-
-from django.views.generic import TemplateView
 
 
 class ExampleListView(LoginRequiredMixin, ListView):
@@ -50,14 +51,11 @@ class ExampleListView(LoginRequiredMixin, ListView):
     # ახალი ვარიანტი
     def get_queryset(self):
         qf = Twitter.objects.filter(followed=self.request.user) # .annotate(tt=(follow__post_set=))
-        print(qf)
         tt = []
         for i in qf:
             p = i.follow.post_set.all()
             tt.extend(p)
-        print(tt)
         tk = [i.pk for i in tt]
-        print(tk)
         querset = Post.objects.filter(id__in=tk)
         return querset.order_by('?')
 
@@ -88,14 +86,12 @@ def followed(request):
     return render(request, 'posts/twitter_list.html', {'twitter_list':f1})
 
 
-
 class FollowListView(LoginRequiredMixin, ListView):
     login_url = '/user/login/'
     template_name = 'posts/follow_list.html'
 
     def get_queryset(self):
         return Twitter.objects.filter(follow=self.request.user)
-
 
 
 def follow_unique(request):
