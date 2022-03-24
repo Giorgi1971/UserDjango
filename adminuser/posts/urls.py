@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('follow/', follow_user, name='follow'),
     path('unfollowing/<int:kk>/', unfollow, name='unfollow'),
-    path('unfollowwing/<int:kk>/', unfollow_user, name='unfollow_user'),
+    path('unfollow_user/<int:kk>/', unfollow_user, name='unfollow_user'),
     path('twitter/', FollowListView.as_view(), name='twitter'),
     path('followed/', followed, name='followed'),
 

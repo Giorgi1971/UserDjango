@@ -1,11 +1,10 @@
-from itertools import count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+from flask import request
 from .models import *
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
 from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from .forms import *
@@ -68,6 +67,18 @@ class ExampleListView(LoginRequiredMixin, ListView):
 class PostDetailView(DetailView):
     model = Post
 
+    # შეგვიძლია გავატანოთ დამატებით რაც გვინდა, მაგარია
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            Twitter.objects.get(follow=self.object.author, followed=self.request.user)
+            dd = False
+        except:
+            dd = True
+        context['follow'] = dd
+        return context
+
+
 
 def unfollow(request, kk):
     follow = User.objects.get(pk=kk)
@@ -76,6 +87,7 @@ def unfollow(request, kk):
     f1 = Twitter.objects.filter(follow=follow, followed=followed)
     f1.delete()
     return redirect(reverse("posts:followed"))
+
 
 def unfollow_user(request, kk):
     followed = User.objects.get(pk=kk)
@@ -86,6 +98,7 @@ def unfollow_user(request, kk):
     return redirect(reverse("posts:twitter"))
 
 
+@login_required
 def followed(request):
     f1 = Twitter.objects.filter(followed=request.user)
     return render(request, 'posts/twitter_list.html', {'twitter_list':f1})

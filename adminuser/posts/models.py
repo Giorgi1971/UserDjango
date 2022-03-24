@@ -33,3 +33,6 @@ class Twitter(models.Model):
 
     def get_absolute_url(self):
         return reverse('posts:posts')
+
+    def __str__(self) -> str:
+        return str(self.follow)+' - '+str(self.followed)
