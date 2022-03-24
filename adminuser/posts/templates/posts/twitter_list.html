@@ -12,7 +12,7 @@
 {% for tt in twitter_list %}
     <div class="author-div">
         <i class="bi bi-person-circle"></i> {{ tt.follow }} - pk_{{  tt.follow.pk }} 
-        <a href="{% url 'posts:following' tt.follow.pk %}" class="single-category btn btn-warning">
+        <a href="{% url 'posts:unfollow' tt.follow.pk %}" class="single-category btn btn-warning">
             UnFollow
         </a>
     </div>

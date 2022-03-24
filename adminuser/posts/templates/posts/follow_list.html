@@ -12,7 +12,7 @@
 {% for tt in twitter_list %}
     <div class="author-div">
         <i class="bi bi-person-circle"></i> {{ tt.followed }} - pk_{{  tt.followed.pk }} 
-        <a href="{% url 'posts:following' tt.follow.pk %}" class="single-category btn btn-warning">
+        <a href="{% url 'posts:unfollow_user' tt.followed.pk %}" class="single-category btn btn-warning">
             Delete Follower!
         </a>
     </div>

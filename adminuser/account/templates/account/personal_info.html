@@ -5,13 +5,13 @@
 <h2>
     Personal Info:
 </h2>
-<h4>
-
-    {{ user }}
-</h4>
-<h4>
-    {{request.user}}
-
-</h4>
+<ul>
+    <li><b> Username: {{user.username}}</b></li>
+    <li>Name: {{user.first_name}}</li>
+    <li>SurName: {{user.last_name}}</li>
+    <li>Email: {{user.email}}</li>
+    <li>Followers: {{user.follow.count }}</li>
+    <li>Followed: {{user.followed.count }}</li>
+</ul>
 
 {% endblock %}

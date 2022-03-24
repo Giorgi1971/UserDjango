@@ -6,6 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Bootstrap CSS -->
+    <!-- თუ ინტერნეტი არაა, static-ში გვაქვს bootstrap5.css -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
@@ -32,12 +33,12 @@
                     </a>
                     <a href="{% url 'posts:followed' %}">
                         <div class='btn d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
-                            <i class="bi-alarm px-2"></i>Following
+                            <i class="bi-alarm px-2"></i>UnFollow
                         </div>
                     </a>
-                    <a href="{% url 'posts:user_info' request.user.pk %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-success rounded-pill bd-highlight shadow'>
-                            <i class="bi-exclamation-triangle px-2"></i> Personal info
+                    <a href="{% url 'posts:user_page'  %}">
+                        <div class='btn d-flex p-2 m-3 border border-5 border-dark rounded-pill bd-highlight shadow'>
+                            <i class="bi-volume-mute-fill px-2"></i></i> Profile
                         </div>
                     </a>
                     <a href="{% url 'posts:user_page' %}">
@@ -50,11 +51,13 @@
                             <i class="bi-alarm px-2"></i>Lists
                         </div>
                     </a>
-                    <a href="{% url 'posts:user_page' %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-dark rounded-pill bd-highlight shadow'>
-                            <i class="bi-volume-mute-fill px-2"></i></i> Profile
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'posts:user_info' user.pk %}">
+                        <div class='btn d-flex p-2 m-3 border border-5 border-success rounded-pill bd-highlight shadow'>
+                            <i class="bi-exclamation-triangle px-2"></i> Personal info
                         </div>
                     </a>
+                    {%endif%}
                     {% endblock %}
                 </div>
             </div>
@@ -69,18 +72,29 @@
             </div>
 
             <div class="col-3">
+
+                {% if user.is_authenticated %}
                 <div class="container">
                     {% block right %}
                     <br>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    {% if u_message %}
+                    <h4 class="text-danger">
+
+                        {{u_message}}
+                    </h4>
+                    {%endif%}
+                    <br>
+                    <form class="d-flex" method="GET" action="{% url 'posts:posts' %}">
+                        <input class="form-control me-2" type="search" name="u_search" value="{{ request.GET.u_search }}"
+                            placeholder="Search in Users" aria-label="Search">
+                        <button class="btn btn-outline-success create-button" type="submit" name="action">Search</button>
                     </form>
 
                     <br>
+                    
                     <h3 class="p-3">
                         <b>
-                            Trends for you
+                            Trends for you!
                         </b>
                     </h3>
                     {% for u in links %}
@@ -114,6 +128,13 @@
 
                     {% endblock %}
                 </div>
+                {%else%}
+                <br><br>
+                <h2 class="text-danger">
+
+                    Login first, to follow!
+                </h2>
+                {%endif%}
             </div>
         </div>
     </div>

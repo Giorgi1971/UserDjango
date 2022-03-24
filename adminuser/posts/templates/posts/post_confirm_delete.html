@@ -14,7 +14,6 @@
     <input class="btn btn-danger" type="submit" value="Delete">
     <a class="btn btn-warning" href="{% url 'posts:post' pk=post.pk %}">Cancel</a>
 </form>
-<a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
 {% else %}
 <h2 class="text-danger ml-auto">
     You haven't Pemishen Delete other's Post!
