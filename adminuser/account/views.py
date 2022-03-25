@@ -19,6 +19,7 @@ def index(request):
 
 
 def login_user(request):
+    message = ''
     if request.method == 'POST':    
         username = request.POST['username']
         password = request.POST['password']
@@ -27,10 +28,8 @@ def login_user(request):
             login(request, user)
             return HttpResponseRedirect(reverse('posts:user_page'))
         else:
-            # Return an 'invalid login' error message.
-            return HttpResponseRedirect(reverse('posts:ddd'))
-            ...
-    return render(request, 'account/login.html')
+            message = 'invalid crediantials'
+    return render(request, 'account/login.html', {'message':message})
 
 
 def register(request):

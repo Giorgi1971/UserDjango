@@ -1,21 +1,30 @@
 {% extends 'account/base.html' %}
 
 {% block center %}
-
+<br>
 <h2>
-    Post detail Page!
+    Post detail Page:
 </h2>
+<br>
+
+<p class="card-text">Author: {{ post.author }}</p>
 
 <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
-
-{% if follow  %}
+{% if user.is_authenticated and follow  %}
 <form action="{% url 'posts:follow' %}" method="POST">
   {% csrf_token %}
   <input type="hidden" name="follow" value="{{post.author.pk}}">
   <input class="btn btn-secondary" type="submit" value="Follow">
   
 </form>
+{% else %}
+<form action="{% url 'posts:unfollow' post.author.pk %}" method="POST">
+  {% csrf_token %}
+  <input type="hidden" name="follow" value="{{post.author.pk}}">
+  <input class="btn btn-secondary" type="submit" value="UnFollow">
+</form>
 {% endif %}
+
 <h4 class="card-title">{{ post.title }}
 
     </h4>

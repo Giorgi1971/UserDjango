@@ -15,8 +15,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 class H(View):
     model = Post
 
-class HomeListView(LoginRequiredMixin, ListView):
-    queryset = User.objects.filter(post__title__startswith='Post')
+class HomeListView(ListView):
+    queryset = User.objects.filter(post__title__icontains='4')
     u_message = 'Show u_message'
     template_name = 'posts/home.html'
     context_object_name = 'hlinks'
@@ -90,8 +90,8 @@ def unfollow(request, kk):
 
 
 def unfollow_user(request, kk):
-    followed = User.objects.get(pk=kk)
     follow = request.user
+    followed = User.objects.get(pk=kk)
 
     f1 = Twitter.objects.filter(follow=follow, followed=followed)
     f1.delete()

@@ -4,7 +4,7 @@
 {% block center %}
 
 <h1>
-    User's own Posts:
+    My Posts ({{ request.user }}):
 </h1>
 
 {% for post in post_list %}
