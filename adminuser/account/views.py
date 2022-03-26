@@ -15,7 +15,8 @@ def logout_view(request):
 
 
 def index(request):
-    return render(request, 'account/index.html')
+    u_message = 'About'
+    return render(request, 'account/index.html', {'u_message':u_message})
 
 
 def login_user(request):

@@ -3,6 +3,7 @@
 
 {% block center %}
 
+<br>
 
 {% if twitter_list %}
 <h1>
@@ -11,7 +12,10 @@
 <br>
 {% for tt in twitter_list %}
     <div class="author-div">
-        <i class="bi bi-person-circle"></i> {{ tt.follow }} - pk_{{  tt.follow.pk }} 
+        <i class="bi bi-person-circle"></i>
+        <a href="{% url 'posts:followw' tt.follow.pk %}">
+            username {{ tt.follow }} - {{  tt.follow.pk }} 
+        </a> 
         <a href="{% url 'posts:unfollow' tt.follow.pk %}" class="single-category btn btn-warning">
             UnFollow
         </a>
@@ -22,10 +26,13 @@
 
     {%endfor%}
 {%else%}
-<h2>
-    No Followed Persons
-
-</h2>
+<h3>
+    {{request.user}}, you aren't follow anyone yet.
+</h3>
+<br>
+<h5>
+    Go to Posts page and follow intristing peoples.
+</h5>
 {%endif%}
 
     {% endblock %}

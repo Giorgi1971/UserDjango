@@ -2,30 +2,38 @@
 
 
 {% block center %}
-
+<br>
+<a class="btn btn-primary px-5" href="{% url 'posts:post_add' %}"><b> Create new Post ... </b></a>
+<br>
+<br>
 <h1>
-    My Posts ({{ request.user }}):
+    {{ request.user | title }} Posts:
 </h1>
-
+<br>
 {% for post in post_list %}
-    <h5><a class="link-dark text-decoration-none" href="{% url 'posts:post' post.pk %}">{{ post.title | title }}</a></h5>
-    <div class="author-div">
-        <i class="bi bi-person-circle"></i>
-        {{ post.author | title }} - Published Date:
-        <span>{{ post.created | date:"SHORT_DATE_FORMAT" }}</span>
-    </div><br>
-    <div class="categories">
-        <a href="{% url 'posts:post_delete' post.pk %}" class="btn btn-sm btn-danger">
-            Delete Post!
-        </a>
-        <a href="{% url 'posts:post_update' post.pk %}" class="btn btn-sm btn-warning">
-            Update Post!
-        </a>
-    </div>
+<h5><a class="link-dark text-decoration-none" href="{% url 'posts:post' post.pk %}">{{ post.title | title }}</a></h5>
+<div class="author-div">
+    <i class="bi bi-person-circle"></i>
+    {{ post.author | title }} - Published Date:
+    <span>{{ post.created | date:"SHORT_DATE_FORMAT" }}</span>
+</div><br>
+<div class="categories">
+    <a href="{% url 'posts:post_delete' post.pk %}" class="btn btn-sm btn-danger">
+        Delete Post!
+    </a>
+    <a href="{% url 'posts:post_update' post.pk %}" class="btn btn-sm btn-warning">
+        Update Post!
+    </a>
+</div>
 
 
 <hr>
 
-    {%endfor%}
+{%empty%}
+<br>
+<h2 class="text-warning">
+    {{request.user | title }} havn't posts yet!
+</h2>
+{%endfor%}
 
-    {% endblock %}
+{% endblock %}

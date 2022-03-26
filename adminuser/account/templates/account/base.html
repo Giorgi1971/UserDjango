@@ -32,23 +32,26 @@
                         </div>
                     </a>
                     <a href="{% url 'posts:followed' %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
-                            <i class="bi-alarm px-2"></i>UnFollow
+                        <div class='btn d-flex p-2 m-3 border border-5 border-dark rounded-pill bd-highlight shadow'>
+                            <i class="bi-alarm px-2"></i>Follow
                         </div>
                     </a>
                     <a href="{% url 'posts:user_page'  %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-dark rounded-pill bd-highlight shadow'>
-                            <i class="bi-volume-mute-fill px-2"></i></i> Profile
+                        <div
+                            class='btn d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
+                            <i class="bi-volume-mute-fill px-2"></i></i> UserPage
                         </div>
                     </a>
-                    <a href="{% url 'posts:user_page' %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-warning rounded-pill bd-highlight shadow'>
+                    <a href="#">
+                        <div class='btn d-flex p-2 m-3 border border-5 border-warning rounded-pill bd-highlight shadow'
+                            role="button" aria-disabled="true">
                             <i class="bi-github px-2"></i>Messages
                         </div>
                     </a>
-                    <a href="{% url 'posts:user_page' %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-info rounded-pill bd-highlight shadow'>
-                            <i class="bi-alarm px-2"></i>Lists
+                    <a href="{% url 'account:about' %}" disabled>
+                        <div class='btn d-flex p-2 m-3 border border-5 border-info rounded-pill bd-highlight shadow disabled'
+                            disabled>
+                            <i class="bi-alarm px-2"></i>About
                         </div>
                     </a>
                     {% if user.is_authenticated %}
@@ -61,7 +64,7 @@
                     {% endblock %}
                 </div>
             </div>
-
+            <!-- ცენტრალური ნაწილი -->
             <div class="col-6">
                 <div class="container">
 
@@ -71,68 +74,83 @@
                 </div>
             </div>
 
+            <!-- მარჯვენა მხარე -->
             <div class="col-3">
-
                 {% if user.is_authenticated %}
                 <div class="container">
                     {% block right %}
-                    <br>
                     {% if u_message %}
-                    <h4 class="text-danger">
-
+                    <h5 class="text-danger">
                         {{u_message}}
-                    </h4>
+                    </h5>
                     {%endif%}
-                    <br>
-                    <form class="d-flex" method="GET" action="{% url 'posts:posts' %}">
-                        <input class="form-control me-2" type="search" name="u_search" value="{{ request.GET.u_search }}"
-                            placeholder="Search in Users" aria-label="Search">
-                        <button class="btn btn-outline-success create-button" type="submit" name="action">Search</button>
+                    <!-- ძებნა უზერების მონაცემებში -->
+                    <form class="d-flex mt-2" method="GET" action="{% url 'posts:u_search' %}">
+                        <input class="form-control me-2" type="search" name="u_search"
+                            value="{{ request.GET.u_search }}" placeholder="Search in Users" aria-label="Search">
+                        <button class="btn btn-outline-success create-button" type="submit"
+                            name="action">Search</button>
                     </form>
 
-                    <br>
-                    
-                    <h3 class="p-3">
+
+                    <h4 class="p-2 text-end">
                         <b>
                             Trends for you!
                         </b>
-                    </h3>
+                    </h4>
                     {% for u in links %}
-                    <div class="list-group">
-                        <a class="list-group-item list-group-item-action" href="#"> {{ u.username }}
-                            <form class="d-inline-block" action="{% url 'posts:follow' %}" method="POST">
+                    <div class="list-group mb-2">
+                        <a class="list-group-item list-group-item-action text-end" href="#"> {{ u.username }}
+                            <form class="d-inline-block" action="{% url 'posts:follow' u.pk %}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="follow" value="{{ u.pk }}">
                                 <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
                                 <input class="btn btn-sm btn-secondary" type="submit" value="Follow">
                             </form>
+                            <br>
+                            Posts {{ u.author.count }};
+                            Follow {{ u.follow.count }};
+                            Followers {{ u.followed.count }}
                         </a>
-                        <a href="#" class="list-group-item list-group-item-action"></a>
-                        {% endfor %}
-                        <br>
-                        <br>
                     </div>
-                    <br>
-                    <hr>
-                    <h3 class="p-3">
+                    {% endfor %}
+                    <h4 class="p-2 text-end">
                         <b> Who to follow</b>
-                    </h3>
-                    <div class="list-group">
-                        <a href="#" class="list-group-item list-group-item-action">First item</a>
-                        <a href="#" class="list-group-item list-group-item-action"></a>
-                        <a href="#" class="list-group-item list-group-item-action">Second item</a>
-                        <a href="#" class="list-group-item list-group-item-action"></a>
-                        <a href="#" class="list-group-item list-group-item-action">Third item</a>
+                    </h4>
+                    {% for u in sec_links %}
+                    <div class="list-group mb-2">
+                        <a class="list-group-item list-group-item-action text-end" href="#"> {{ u.username }}
+                            <form class="d-inline-block" action="{% url 'posts:follow' u.pk %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="follow" value="{{ u.pk }}">
+                                <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
+                                <input class="btn btn-sm btn-secondary" type="submit" value="Follow">
+                            </form>
+                            <br>
+                            Posts {{ u.author.count }};
+                            Follow {{ u.follow.count }};
+                            Followers {{ u.followed.count }}
+                        </a>
+                    </div>
+                    {% endfor %}
+                    {% if hlinks %}
+                    <h4 class="p-2 text-end">
+                        <b> Maybe this</b>
+                    </h4>
+                    {% for item in hlinks %}
+                    <div class="list-group text-end">
+                        <a href="{% url 'posts:followw' item.pk %}" class="list-group-item list-group-item-action">{{ item }}</a>
                         <a href="#" class="list-group-item list-group-item-action"></a>
                     </div>
+                    {% endfor %}
+                    {% endif %}
 
                     {% endblock %}
                 </div>
                 {%else%}
                 <br><br>
                 <h2 class="text-danger">
-
-                    Login first, to follow!
+                    Login first,<br> <br> to follow!
                 </h2>
                 {%endif%}
             </div>

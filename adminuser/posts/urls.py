@@ -9,9 +9,11 @@ urlpatterns = [
     path('post/<int:pk>/', PostDetailView.as_view(), name='post'),
     
     path('example/', ExampleListView.as_view(), name='example'),
+    path('example2/', ExampleListView2.as_view(), name='example2'),
 
-    path('follow/', follow_user, name='follow'),
-    path('unfollowing/<int:kk>/', unfollow, name='unfollow'),
+    path('follow/<int:pk>/', follow_user, name='follow'),
+    path('followw/<int:pk>/', followw_user, name='followw'),
+    path('unfollow/<int:kk>/', unfollow, name='unfollow'),
     path('unfollow_user/<int:kk>/', unfollow_user, name='unfollow_user'),
     path('twitter/', FollowListView.as_view(), name='twitter'),
     path('followed/', followed, name='followed'),
@@ -23,10 +25,11 @@ urlpatterns = [
     path('post/<int:pk>/delete/', PostDeleteView.as_view(), name='post_delete'),
 
     # გამოაქვს 1 - მხოლოდ თავისი პოსტები, 2 - თავისი მონაცემები 
-    path('user_page/', user_page, name='user_page'),
+    # path('user_page/', user_page, name='user_page'),
+    path('user_page/', UserPage.as_view(), name='user_page'),
     path('user_info/<int:pk>', PersonalDetailView.as_view(), name='user_info'),
 
-    path('ddd/', ddd, name='ddd'),
+    path('u_search/', SearchUserPage.as_view(), name='u_search'),
 
     # path('categories/', CategoryListView.as_view(), name='categories'),
     # path('category/<int:pk>', CategoryDetailView.as_view(), name='category'),

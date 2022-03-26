@@ -11,13 +11,13 @@
 
 <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
 {% if user.is_authenticated and follow  %}
-<form action="{% url 'posts:follow' %}" method="POST">
+<form action="{% url 'posts:follow' post.author.pk %}" method="POST">
   {% csrf_token %}
   <input type="hidden" name="follow" value="{{post.author.pk}}">
   <input class="btn btn-secondary" type="submit" value="Follow">
   
 </form>
-{% else %}
+{% elif user.is_authenticated %}
 <form action="{% url 'posts:unfollow' post.author.pk %}" method="POST">
   {% csrf_token %}
   <input type="hidden" name="follow" value="{{post.author.pk}}">

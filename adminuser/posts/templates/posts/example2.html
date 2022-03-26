@@ -20,7 +20,8 @@
             <h6 style="color: darkgray;">
                 Author with pk - {{item.author.pk}}
             </h6>
-            <form action="{% url 'posts:follow' %}" method="POST">
+            <!-- ?????????????????????????????????????????????????????????????????????????????????? -->
+            <form action="{% url 'posts:follow' 1 %}" method="POST">
                 {% csrf_token %}
                 <input type="hidden" name="follow" value="{{item.author.pk}}">
                 <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
@@ -39,14 +40,15 @@
             <p class="card-text">Text: {{item.text}}</p>
             <p class="card-text">Created date: {{item.created}}.</p>
     
-    
         </div>
         <div class="card-footer text-muted">
             Followed by <b>{{item.author.follow.count}}</b> user.
         </div>
     </div>
-    
-
+    {%empty%}
+<h3>
+    No list
+</h3>
 {% endfor %}
 
 

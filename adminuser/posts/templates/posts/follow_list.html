@@ -2,7 +2,7 @@
 
 
 {% block center %}
-
+<br>
 
 {% if twitter_list %}
 <h1>
@@ -23,10 +23,16 @@
     {%endfor%}
     
 {%else%}
-<h2>
-    No Followed Persons
 
-</h2>
+<h3>
+    Nobody Follow You.
+    
+</h3>
+<br>
+<h5>
+    Be more active, make Posts!
+
+</h5>
 {%endif%}
 
     {% endblock %}
