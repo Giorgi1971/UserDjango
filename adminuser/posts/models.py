@@ -13,10 +13,10 @@ class Post(models.Model):
     created = models.DateTimeField(default=datetime.now())
 
     def __str__(self) -> str:
-        return self.title + ' - ' + str(self.author.pk)+ ' - ' + str(self.pk)
+        return self.title # + ' - ' + str(self.author.pk)+ ' - ' + str(self.pk)
 
     def get_absolute_url(self):
-        return reverse('posts:user_page')
+        return reverse("posts:post", kwargs={'pk': self.pk})
 
     class Meta:
         ordering = ['-created']

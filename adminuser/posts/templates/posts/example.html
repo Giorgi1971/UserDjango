@@ -1,49 +1,38 @@
 {% extends 'account/base.html' %}
 
 {% block center %}
-<h2>
-    Example:
-</h2>
 
-{{ list }}
-
-<h3>
-    List:
+<h3 class="text-success">
+   <b> Only followed users Posts:</b>
 </h3>
 {% for item in list %}
 
-    <div class="card">
-        <div class="card-header text-secondary">
-            <h4>
-                {{item.author | title }}
-            </h4>
-            <h6 style="color: darkgray;">
-                Author with pk - {{item.author.pk}}
-            </h6>
-            <form action="{% url 'posts:follow' item.author.pk %}" method="POST">
-                {% csrf_token %}
-                <input type="hidden" name="follow" value="{{item.author.pk}}">
-                <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
-                <input class="btn btn-secondary" type="submit" value="Follow">
-            </form>
-        </div>
-        <div class="card-body">
-            <a class="link-secondary" href="{% url 'posts:post' item.pk %}">
-                <h5 class="card-title">Title: {{item}} - post_pk {{item.pk}} </h5>
+<div class="card">
+    <div class="card-header text-secondary">
+            <a class="link-secondary text-decoration-none" href="{% url 'posts:post' item.pk %}">
+              <i> Title:</i><b> {{item}}.</b> 
             </a>
-    
-            {% if item.image %}
-            <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:70%">
-            {% endif %}
-    
-            <p class="card-text">Text: {{item.text}}</p>
-            <p class="card-text">Created date: {{item.created}}.</p>
-    
-        </div>
-        <div class="card-footer text-muted">
-            Followed by <b>{{item.author.follow.count}}</b> user.
-        </div>
+            <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' item.author.pk %}">
+               <i> by </i> <b> {{item.author | title }}. </b>
+            </a>
+
     </div>
+    <div class="card-body">
+
+        {% if item.image %}
+        <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:70%">
+        {% endif %}
+
+        <p class="card-text">Text: {{item.text}}</p>
+
+    </div>
+    <div class="card-footer text-muted">
+        Created date: {{item.created}}  ||| <b>{{item.author.follow.count}}</b> followers. 
+    </div>
+</div>
+
+<hr class="collor:green p-2">
+
     {%empty%}
 <h3>
     No list
