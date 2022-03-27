@@ -7,7 +7,7 @@
     <center style="margin: auto;">
         {% if user.is_authenticated %}
         <br>
-        <a class="btn btn-primary px-5" href="{% url 'posts:post_add' %}"><b> Create new Post ... </b></a>
+        <a class="btn btn-secondary px-5" href="{% url 'posts:post_add' %}"><b> Create new Post ... </b></a>
         <br>
         {% endif %}
         <br>
@@ -20,8 +20,9 @@
     </center>
 </div>
 <br>
+
 {% if message %}
-<h3 class="text-danger"> {{ message }} </h3>
+<h5 class="text-danger"> {{ message }} </h5>
 {% endif %}
 
 <h3 class="text-success">
@@ -42,7 +43,7 @@
     <div class="card-body">
 
         {% if item.image %}
-        <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:70%">
+        <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:50%">
         {% endif %}
 
         <p class="card-text">Text: {{item.text}}</p>

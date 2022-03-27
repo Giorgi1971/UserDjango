@@ -21,13 +21,13 @@
             <div class="col-3">
                 <div class="container">
                     {% block left %}
-                    <h1 class="text-primary">
+                    <h1 class="text-secondary">
                         <b>
                             Gitter
                         </b>
                     </h1>
                     <a href="{% url 'posts:twitter' %}">
-                        <div class='btn d-flex p-2 m-3 border border-5 border-primary rounded-pill bd-highlight shadow'>
+                        <div class='btn d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
                             <i class="bi-shop px-2"></i>Followers
                         </div>
                     </a>
@@ -38,7 +38,7 @@
                     </a>
                     <a href="{% url 'posts:user_page'  %}">
                         <div
-                            class='btn d-flex p-2 m-3 border border-5 border-secondary rounded-pill bd-highlight shadow'>
+                            class='btn d-flex p-2 m-3 border border-5 border-primary rounded-pill bd-highlight shadow'>
                             <i class="bi-volume-mute-fill px-2"></i></i> UserPage
                         </div>
                     </a>
@@ -80,7 +80,7 @@
                 <div class="container">
                     {% block right %}
                     {% if u_message %}
-                    <h5 class="text-danger">
+                    <h5 class="text-danger text-end">
                         {{u_message}}
                     </h5>
                     {%endif%}
@@ -149,9 +149,9 @@
                 </div>
                 {%else%}
                 <br><br>
-                <h2 class="text-danger">
+                <h3 class="text-danger text-center">
                     Login first,<br> <br> to follow!
-                </h2>
+                </h3>
                 {%endif%}
             </div>
         </div>

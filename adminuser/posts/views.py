@@ -11,30 +11,24 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
+# Home page, with message by get_context_data()
 class HomeListView(ListView):
-    queryset = User.objects.all().order_by('?')[0:5]
+    queryset = User.objects.all().order_by('?')
     template_name = 'posts/home.html'
     context_object_name = 'hlinks'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['u_message'] = ''
+        context['u_message'] = 'Home'
         return context
 
 
-class PersonalDetailView(DetailView):
+class PersonalDetailView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     template_name = 'account/user_detail.html'
 
 
-# საკუთარი პოსტების გამოტანა user_page.html 
-@login_required
-def user_page(request):
-    post_list = Post.objects.filter(author=request.user)
-    return render(request, 'posts/user_page.html', {'post_list':post_list})
-
-
-class UserPage(LoginRequiredMixin, ListView):
+class UserPageListView(LoginRequiredMixin, ListView):
     template_name = 'posts/user_page.html'
     context_object_name = 'post_list'
 
@@ -42,15 +36,14 @@ class UserPage(LoginRequiredMixin, ListView):
         return Post.objects.filter(author=self.request.user)
 
 
+# Only Post from followed People
 class ExampleListView(LoginRequiredMixin, ListView):
     context_object_name = 'list'
     template_name = 'posts/example.html'
     def get_queryset(self):
-        qf = Twitter.objects.filter(followed=self.request.user) # .annotate(tt=(follow__post_set=))
+        qf = Twitter.objects.filter(followed=self.request.user)
         tt = []
         for i in qf:
-            print(i.follow.author.all())
-            # p = i.follow.post_set.all()
             p = i.follow.author.all()
             tt.extend(p)
         tk = [i.pk for i in tt]
@@ -59,30 +52,52 @@ class ExampleListView(LoginRequiredMixin, ListView):
         return querset
 
 
+# First follow posts, then other. with search and create post
 class ExampleListView2(LoginRequiredMixin, ListView):
+    model = Post
     context_object_name = 'list'
     template_name = 'posts/example2.html'
 
     def get_queryset(self):
-        qf = Twitter.objects.filter(followed=self.request.user) # .annotate(tt=(follow__post_set=))
-        return qf
+        #  don't work without [0:num] correctly
+        ln = len(Post.objects.all())-1
+        p1 = Post.objects.all()[0:ln]
+        qf = Twitter.objects.filter(followed=self.request.user)
+        tt = []
+        for i in qf:
+            p = i.follow.author.all()
+            tt.extend(p)
+        print(tt)
+        tk = [i.pk for i in tt]
+        t = Post.objects.filter(id__in=tk)
+        comb = (t | p1).distinct()
+
+        phrase_q = Q()
+        q = self.request.GET.get('phrase')
+        if q:
+            phrase_q &= (Q(title__icontains=q) | Q(text__icontains=q) | Q(title__icontains=q))
+        
+        quer = comb.filter(phrase_q)
+        return quer
 
 
-# ცალკეული პოსტის ნახვა, თუ ავტორი ნახულობს აქვს რედაქტირების საშუალება
+# Post detail page.
 class PostDetailView(DetailView):
     model = Post
-    # შეგვიძლია გავატანოთ დამატებით რაც გვინდა, მაგარია
+
+    # Used for Follow/UnFollow Post owner.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             Twitter.objects.get(follow=self.object.author, followed=self.request.user)
-            dd = False
+            _foll = False
         except:
-            dd = True
-        context['follow'] = dd
+            _foll = True
+        context['follow'] = _foll
         return context
 
 
+# unfollow someone
 def unfollow(request, kk):
     follow = User.objects.get(pk=kk)
     followed = request.user
@@ -92,6 +107,7 @@ def unfollow(request, kk):
     return redirect(reverse("posts:followed"))
 
 
+# Delete your follower
 def unfollow_user(request, kk):
     follow = request.user
     followed = User.objects.get(pk=kk)
@@ -101,12 +117,16 @@ def unfollow_user(request, kk):
     return redirect(reverse("posts:twitter"))
 
 
-@login_required
-def followed(request):
-    f1 = Twitter.objects.filter(followed=request.user)
-    return render(request, 'posts/twitter_list.html', {'twitter_list':f1})
+# List I follow
+class FollowedListView(LoginRequiredMixin, ListView):
+    login_url = '/user/login/'
+    template_name = 'posts/twitter_list.html'
+
+    def get_queryset(self):
+        return Twitter.objects.filter(followed=self.request.user)
 
 
+# User's Who Followed Me
 class FollowListView(LoginRequiredMixin, ListView):
     login_url = '/user/login/'
     template_name = 'posts/follow_list.html'
@@ -115,11 +135,10 @@ class FollowListView(LoginRequiredMixin, ListView):
         return Twitter.objects.filter(follow=self.request.user)
 
 
+# Button for Follow someone
+@login_required
 def follow_user(request, pk):
-    message = ''
-    # follow_pk = request.POST['follow']
     post_list = Post.objects.filter(author__pk=pk).order_by()
-    print(post_list)
     if Twitter.objects.filter(follow=pk, followed=request.user.pk):
         message = 'Already follower'
     else:
@@ -127,11 +146,12 @@ def follow_user(request, pk):
         follower = request.user
         f1 = Twitter(follow=follow, followed=follower)
         f1.save()
-        message = f'follow {follow} follower'
-    # return HttpResponseRedirect(reverse('posts:posts'))    
+        message = f'You ({follower}) follow {follow}.'
+    # return HttpResponseRedirect(reverse('posts:posts'))  ამითი უნდა ვცადო გაკეთება
     return render(request, 'posts/post_list.html', {'page_obj':post_list, 'message':message})
 
 
+# Maybe this must Delete???? follow without Form, with <a> tag 
 def followw_user(request, pk):
     message = ''
     post_list = Post.objects.filter(author__pk=pk).order_by()
@@ -139,21 +159,20 @@ def followw_user(request, pk):
     return render(request, 'posts/post_list.html', {'page_obj':post_list, 'message':message})
 
 
+# Search in User's class. Find and follow user.
 class SearchUserPage(ListView):
     template_name = 'posts/u_search.html'
 
     def get_queryset(self):
         phrase_q = Q()
         q = self.request.GET.get('u_search')
-        print(q)
         if q:
-            phrase_q &= (Q(username__icontains=q) | Q(last_name__icontains=q) | Q(username__icontains=q))
-        print(self.request.user.pk)
-        p1 = User.objects.filter(phrase_q) #.filter(author__followed__pk=self.request.user.pk)
-        return p1.order_by('-pk')
+            phrase_q &= (Q(username__icontains=q) | Q(first_name__icontains=q) | Q(last_name__icontains=q))
+        p1 = User.objects.filter(phrase_q)
+        return p1.order_by('?')
 
 
-# პოსტების დაბრუნება, მათ შორის გაფილტრულისაც სათაურით და ტექსტსტით.
+# all posts list, order by last date. With search and create Post form
 class PostListView(ListView):
     model = Post
     paginate_by = 2
@@ -161,14 +180,23 @@ class PostListView(ListView):
     def get_queryset(self):
         phrase_q = Q()
         q = self.request.GET.get('phrase')
-        qa = self.request.GET.get('qa')
         if q:
             phrase_q &= (Q(title__icontains=q) | Q(text__icontains=q) | Q(title__icontains=q))
-        if qa:
-            phrase_q &= (Q(author__pk=qa))
         print(self.request.user.pk)
-        p1 = Post.objects.filter(phrase_q) #.filter(author__followed__pk=self.request.user.pk)
-        return p1.order_by('-pk')
+        _query = Post.objects.filter(phrase_q) 
+        return _query.order_by('-pk')
+    
+    # Don't used. returns List
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        qf = Twitter.objects.filter(followed=self.request.user)
+        tt = []
+        for i in qf:
+            p = i.follow.author.all()
+            tt.extend(p)
+        context['tt'] = tt
+        return context
+
 
 # create new Post with function
 def post_add(request):
@@ -189,26 +217,20 @@ def post_add(request):
     return render(request, 'posts/post_form.html', {'form':form})
 
 
+# ToDo. Can't pass request user. maybe def save, with request user
 class PostCreateView(CreateView):
     model = Post
     form_class = PostModelForm
 
-    # if form_class.is_valid():
-    #     form_class.save(author=request.user, commit=False)
-
-    # fields = '__all__'
-
-    # def post(self):
-    #     form_class.author = 
-
 
 # აქ გვინდა რომ მხოლოდ პოსტის ავტორს შეეძლოს მოხვედრა
 class PostUpdateView(UpdateView):
-    fields = ('title', 'text', 'image')
+    # fields = ('title', 'text', 'image')
     model = Post
+    form_class = PostModelForm
 
 
 # ეს არ შლის სურათს მედია ფაილიდან. გადასაწყვეტია ...
 class PostDeleteView(DeleteView):
     model = Post
-    success_url = reverse_lazy('posts:posts')
+    success_url = reverse_lazy('posts:example2')

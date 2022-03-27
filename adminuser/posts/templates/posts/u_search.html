@@ -2,15 +2,18 @@
 
 {% block center %}
 <br>
-U-Search:  {{ request.user}}
+Search result in Users:
 <br>
 <hr>
-<br>
-{% for i in user_list %}
-<p>
-    <a href="{% url 'posts:followw' i.pk %}">{{i}}</a>
-    
-</p>
-{% endfor %}
+<ul>
+
+    {% for i in user_list %}
+    <li text-sm-start>
+        <a href="{% url 'posts:followw' i.pk %}">{{i}} {{i.first_name}} {{i.last_name}}</a>
+        
+    </li>
+    <br>
+    {% endfor %}
+</ul>
 
 {% endblock %}

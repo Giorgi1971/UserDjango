@@ -18,8 +18,8 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse("posts:post", kwargs={'pk': self.pk})
 
-    class Meta:
-        ordering = ['-created']
+    # class Meta:
+    #     ordering = ['-created']
 
 
 class Twitter(models.Model):
@@ -33,7 +33,7 @@ class Twitter(models.Model):
         return reverse('posts:posts')
 
     def __str__(self) -> str:
-        return str(self.follow)+' - '+str(self.followed)
+        return str(self.follow.pk)+' - '+str(self.followed.pk)
 
     # ეს ქვედა ორი ხაზის გაკეთება უნდა ვცადო. ანუ ვიუს ფუნქციები follow_user და unfollow აქ გადმოვიდეს.
     def following(self):
