@@ -1,5 +1,7 @@
+from email import message
+from multiprocessing import context
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_list_or_404, render, redirect
+from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .models import *
@@ -9,6 +11,8 @@ from django.urls import reverse_lazy, reverse
 from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 
 # Home page, with message by get_context_data()
@@ -67,7 +71,6 @@ class ExampleListView2(LoginRequiredMixin, ListView):
         for i in qf:
             p = i.follow.author.all()
             tt.extend(p)
-        print(tt)
         tk = [i.pk for i in tt]
         t = Post.objects.filter(id__in=tk)
         comb = (t | p1).distinct()
@@ -93,6 +96,12 @@ class PostDetailView(DetailView):
             _foll = False
         except:
             _foll = True
+        p1 = Post.objects.get(pk=self.object.pk)
+        if p1.like.filter(pk=self.request.user.id).exists():
+            liked = False
+        else:
+            liked = True
+        context['liked'] = liked
         context['follow'] = _foll
         return context
 
@@ -185,17 +194,6 @@ class PostListView(ListView):
         print(self.request.user.pk)
         _query = Post.objects.filter(phrase_q) 
         return _query.order_by('-pk')
-    
-    # Don't used. returns List
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        qf = Twitter.objects.filter(followed=self.request.user)
-        tt = []
-        for i in qf:
-            p = i.follow.author.all()
-            tt.extend(p)
-        context['tt'] = tt
-        return context
 
 
 # create new Post with function
@@ -234,3 +232,17 @@ class PostUpdateView(UpdateView):
 class PostDeleteView(DeleteView):
     model = Post
     success_url = reverse_lazy('posts:example2')
+
+
+def like(request, pk):
+    p1 = get_object_or_404(Post, pk=pk)
+    p2 = request.user.pk
+    if not p1.like.filter(pk=request.user.id).exists():
+        p1.like.add(p2)
+    else:
+        p1.like.remove(p2)
+    return HttpResponseRedirect(reverse('posts:post', kwargs={'pk':pk}))
+
+
+class MessageListView(ListView):
+    model = Message

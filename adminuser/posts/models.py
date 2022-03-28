@@ -1,3 +1,4 @@
+from cgitb import text
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
@@ -11,15 +12,27 @@ class Post(models.Model):
     text = models.CharField(max_length=255, default='Text for post...')
     image = models.ImageField(upload_to='post_images', blank=True, null=True)
     created = models.DateTimeField(default=datetime.now())
+    like = models.ManyToManyField(User, related_name='users')
+
+    def total_like(self):
+        return self.like.count()
+
 
     def __str__(self) -> str:
-        return self.title # + ' - ' + str(self.author.pk)+ ' - ' + str(self.pk)
+        return self.title + ' | ' + str(self.author.pk) + ' | ' + str(self.pk)
 
     def get_absolute_url(self):
         return reverse("posts:post", kwargs={'pk': self.pk})
 
     # class Meta:
     #     ordering = ['-created']
+
+
+class Message(models.Model):
+    text = models.CharField(max_length=256)
+    mes_created = models.DateTimeField(default=datetime.now())
+    writer = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 
 class Twitter(models.Model):

@@ -29,4 +29,10 @@ urlpatterns = [
     path('user_info/<int:pk>', PersonalDetailView.as_view(), name='user_info'),
     # search in users data
     path('u_search/', SearchUserPage.as_view(), name='u_search'),
+
+    path('like/<int:pk>/', like, name='like'),
+    path('like/<int:pk>/', like, name='unlike'), # dasawaeria
+
+    path('messages/', MessageListView.as_view(), name='messages'),
+
 ]

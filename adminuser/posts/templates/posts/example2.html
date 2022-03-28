@@ -1,7 +1,6 @@
 {% extends 'account/base.html' %}
 
 {% block center %}
-
 <h3 class="text-success">
     <b> First follow users posts:</b>
 </h3>
@@ -33,60 +32,16 @@
     Posts:
 </h3>
 
-
-<!-- 
-{{ tt }}
-{% for item in tt %}
-
-<div class="card">
-    <div class="card-header text-secondary">
-            <a class="link-secondary text-decoration-none" href="{% url 'posts:post' item.pk %}">
-              <i> Title:</i><b> {{item}}.</b> 
-            </a>
-            <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' item.author.pk %}">
-               <i> by </i> <b> {{item.author | title }}. </b>
-            </a>
-
-    </div>
-    <div class="card-body">
-
-        {% if item.image %}
-        <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:50%">
-        {% endif %}
-
-        <p class="card-text">Text: {{item.text}}</p>
-
-    </div>
-    <div class="card-footer text-muted">
-        Created date: {{item.created}}  ||| <b>{{item.author.follow.count}}</b> followers. 
-    </div>
-</div>
-
-<hr class="collor:green p-2">
-
-{%endfor%}
-
-
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr>
-<hr> -->
-
-
-
 {% for item in list %}
 
 <div class="card">
     <div class="card-header text-secondary">
-            <a class="link-secondary text-decoration-none" href="{% url 'posts:post' item.pk %}">
-              <i> Title:</i><b> {{item}}.</b> 
-            </a>
-            <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' item.author.pk %}">
-               <i> by </i> <b> {{item.author | title }}. </b>
-            </a>
+        <a class="link-secondary text-decoration-none" href="{% url 'posts:post' item.pk %}">
+            <i> Title:</i><b> {{item}}.</b>
+        </a>
+        <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' item.author.pk %}">
+            <i> by </i> <b> {{item.author | title }}. </b>
+        </a>
 
     </div>
     <div class="card-body">
@@ -99,7 +54,8 @@
 
     </div>
     <div class="card-footer text-muted">
-        Created date: {{item.created}}  ||| <b>{{item.author.follow.count}}</b> followers. 
+        Created date: {{item.created}} ||| <b>{{item.author.follow.count}}</b> followers.
+        <a class="btn btn-outline-success" href="{% url 'posts:post' item.pk %}"> {{ item.like.count }} likes</a>
     </div>
 </div>
 
@@ -114,19 +70,20 @@
         {% if page_obj.has_previous %}
 
         <li class="page-item "><a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page=1">
-            &laquo; First
-        </a>
-    </li>
+                &laquo; First
+            </a>
+        </li>
         <li class="page-item">
-            <a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page={{ page_obj.previous_page_number }}">
-            {{page_obj.previous_page_number }}
-        </a>
-    </li>
+            <a class="page-link link-dark"
+                href="?phrase={{ request.GET.phrase }}&page={{ page_obj.previous_page_number }}">
+                {{page_obj.previous_page_number }}
+            </a>
+        </li>
         {% endif %}
 
         <li class="page-item"><a class="page-link link-success" href="#"><b>
-            {{ page_obj.number }}
-        </b></a></li>
+                    {{ page_obj.number }}
+                </b></a></li>
 
         {% if page_obj.has_next %}
         <li class="page-item">
@@ -135,7 +92,8 @@
             </a>
         </li>
         <li class="page-item">
-            <a class="page-link link-dark" href="?phrase={{ request.GET.phrase }}&page={{ page_obj.paginator.num_pages }}">
+            <a class="page-link link-dark"
+                href="?phrase={{ request.GET.phrase }}&page={{ page_obj.paginator.num_pages }}">
                 Last &raquo;
             </a>
         </li>

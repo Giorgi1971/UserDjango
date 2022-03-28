@@ -3,19 +3,21 @@
 {% block center %}
 <br>
 <h2>
-    Post detail Page:
+  Post detail Page:
 </h2>
 <br>
 
 <p class="card-text">Author: {{ post.author }}</p>
 
 <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
-{% if user.is_authenticated and follow  %}
+{% if request.user != post.author %}
+{% if user.is_authenticated and follow %}
+
 <form action="{% url 'posts:follow' post.author.pk %}" method="POST">
   {% csrf_token %}
   <input type="hidden" name="follow" value="{{post.author.pk}}">
   <input class="btn btn-secondary" type="submit" value="Follow">
-  
+
 </form>
 {% elif user.is_authenticated %}
 <form action="{% url 'posts:unfollow' post.author.pk %}" method="POST">
@@ -24,34 +26,48 @@
   <input class="btn btn-secondary" type="submit" value="UnFollow">
 </form>
 {% endif %}
+{% endif %}
+<br>
+<div class="card">
+  <div class="card-header text-secondary">
+    <a class="link-secondary text-decoration-none" href="{% url 'posts:post' post.pk %}">
+      <i> Title:</i><b> {{post}}.</b>
+    </a>
+    <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' post.author.pk %}">
+      <i> by </i> <b> {{post.author | title }}. </b>
+    </a>
+  </div>
+  <div class="card-body">
 
-<h4 class="card-title">{{ post.title }}
+    {% if post.image %}
+    <img class="card-img-top" src="{{ post.image.url }}" alt="Card image" style="width:50%">
+    {% endif %}
 
-    </h4>
+    <p class="card-text">Text: {{post.text}}</p>
 
+  </div>
+  <div class="card-footer text-muted">
+    Created date: {{post.created}} ||| <b>{{post.author.follow.count}}</b> followers.
+    {% if liked %}
+    <a class="btn btn-sm btn-outline-success" href="{% url 'posts:like' post.pk %}"> Like</a>
+    <i>likes={{post.like.count }}</i>
+    {% else %}
+    <a class="btn btn-sm btn-outline-danger" href="{% url 'posts:unlike' post.pk %}">Unlike</a>
+    <i>likes={{post.like.count }}</i>
+    {% endif %}
+  </div>
+</div>
 
-        <div class="card" style="width:300px">
-          {% if post.image %}
-          <img class="card-img-top" src="{{ post.image.url }}" alt="Card image" style="width:100%">
-          {% endif %}
-          <div class="card-body">
-            <p class="card-text">Text:</p>
-            <p class="card-text">{{ post.text }}</p>
-            
-            <p class="card-text">Author: {{ post.author }}</p>
-            <p class="card-text">Created: {{ post.created | date:"SHORT_DATE_FORMAT" }}</p>
-          </div>
-        </div>
-        <br>
-        {% if request.user == post.author %}
-        <div class="container">
-            <p>
-                <a class="btn btn-warning" href="{% url 'posts:post_update' pk=post.pk %}">Update</a>
-         
-                <a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
-            </p>
-        </div>
-        
+<br>
+{% if request.user == post.author %}
+<div class="container">
+  <p>
+    <a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
+    <a class="btn btn-warning" href="{% url 'posts:post_update' pk=post.pk %}">Update</a>
+  </p>
+</div>
+<hr class="collor:green p-2">
+
 {% endif %}
 
 {% endblock %}

@@ -28,6 +28,7 @@
     </div>
     <div class="card-footer text-muted">
         Created date: {{item.created}}  ||| <b>{{item.author.follow.count}}</b> followers. 
+        <a class="btn btn-outline-success" href="{% url 'posts:post' item.pk %}"> {{ item.like.count }} likes</a>
     </div>
 </div>
 
