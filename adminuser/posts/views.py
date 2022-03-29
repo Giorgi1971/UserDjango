@@ -1,5 +1,6 @@
 from email import message
 from multiprocessing import context
+from pyexpat import model
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from django.views import View
@@ -87,6 +88,10 @@ class ExampleListView2(LoginRequiredMixin, ListView):
 # Post detail page.
 class PostDetailView(DetailView):
     model = Post
+    form_class = CommentForm
+    fields = '__all__'
+
+
 
     # Used for Follow/UnFollow Post owner.
     def get_context_data(self, **kwargs):
@@ -199,6 +204,7 @@ class PostListView(ListView):
 # create new Post with function
 def post_add(request):
     form = PostModelForm()
+    formc = CommentForm()
     if request.method == 'POST':
         if request.user:
             form = PostModelForm(request.POST, request.FILES)
@@ -212,7 +218,7 @@ def post_add(request):
                 # კარგია თუ დამამახსოვრდება, სხვა დროსაც დამჭირდება
                 # form.save_m2m()
                 return redirect(reverse("posts:posts"))
-    return render(request, 'posts/post_form.html', {'form':form})
+    return render(request, 'posts/post_form.html', {'form':form,'formc':formc})
 
 
 # ToDo. Can't pass request user. maybe def save, with request user
@@ -244,5 +250,9 @@ def like(request, pk):
     return HttpResponseRedirect(reverse('posts:post', kwargs={'pk':pk}))
 
 
-class MessageListView(ListView):
-    model = Message
+class CommentListView(ListView):
+    model = Comment
+
+
+class CommentCreateView(CreateView):
+    model = Comment

@@ -28,7 +28,7 @@ class Post(models.Model):
     #     ordering = ['-created']
 
 
-class Message(models.Model):
+class Comment(models.Model):
     text = models.CharField(max_length=256)
     mes_created = models.DateTimeField(default=datetime.now())
     writer = models.ForeignKey(User, on_delete=models.CASCADE)

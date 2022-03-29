@@ -1,9 +1,8 @@
 from django import forms
-from .models import Post
+from .models import Comment, Post
 from django.forms.widgets import Input
 from datetime import datetime
 from django.contrib.auth.models import User
-
 
 
 class PostModelForm(forms.ModelForm):
@@ -24,3 +23,9 @@ class PostModelForm(forms.ModelForm):
         if commit:
             post.save()
         return post
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']

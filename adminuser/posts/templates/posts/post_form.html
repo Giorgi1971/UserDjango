@@ -2,14 +2,12 @@
 
 {% block center %}
 
-    
     {% if not form.instance.pk %}
     <h1>Create Post...</h1>
     {% else %}
     <h1>Update Post!</h1>
     {% endif %}
 
-    
     <div class="jumbotron">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -18,7 +16,6 @@
         {% if form.instance.pk %}
         <a class="btn btn-warning" href="{% url 'posts:post' post.pk %}">Cancel</a>
         {% endif %}
-
     </form>
 </div>
 
