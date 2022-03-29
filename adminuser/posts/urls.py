@@ -34,8 +34,9 @@ urlpatterns = [
     path('like/<int:pk>/', like, name='unlike'), # dasawaeria
 
     path('messages/', CommentListView.as_view(), name='comment'),
-    path('comment_new/', CommentCreateView.as_view(), name='comment_new'),
-    path('messages/', CommentListView.as_view(), name='comment'),
+    path('comment_new/', comment_new, name='comment_new'),
+    # path('comment_new/', CommentCreateView.as_view(), name='comment_new'),
+    # path('comment_add/', comment_add, name='comment_add'),
     path('messages/', CommentListView.as_view(), name='comment'),
     
 

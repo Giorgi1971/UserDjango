@@ -67,7 +67,7 @@
 
 {% endif %}
 
-{% if post.comment_set.all %}
+{% if post.comments.all %}
 <h5 class="text-warning">
   Comments:
 </h5>
@@ -81,7 +81,7 @@
       </tr>
     </thead>
     <tbody>
-    {% for i in post.comment_set.all %}
+    {% for i in post.comments.all %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{i.text}} </td>
@@ -93,14 +93,15 @@
 </table>
 {% endif %}
 <h6>
-  Add comment:
-</h6><br>
-<form action="#" method="post">
+  Add commentt:
+</h6>
+<form action="{% url 'posts:comment_new' %}" method="POST">
   {% csrf_token %}
-  {{ form.as_p }}
+  <!-- <input type="text" placeholder="Add comment"> -->
+  <input type="hidden" name="postpk" value="{{ post.pk }}">
+  {{ form_c.as_p }}
   <input type="submit" value="Comment">
-
 </form>
 
-<a href="{% url 'posts:comment_new' %}">Create Comment</a>
+<!-- <a href="{% url 'posts:comment_new' %}">Create Comment</a> -->
 {% endblock %}

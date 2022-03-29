@@ -1,10 +1,8 @@
 from email import message
-from multiprocessing import context
-from pyexpat import model
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
-from django.views import View
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
+from flask import request
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -13,7 +11,6 @@ from .forms import *
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from django.utils.decorators import method_decorator
 
 
 # Home page, with message by get_context_data()
@@ -88,10 +85,7 @@ class ExampleListView2(LoginRequiredMixin, ListView):
 # Post detail page.
 class PostDetailView(DetailView):
     model = Post
-    form_class = CommentForm
     fields = '__all__'
-
-
 
     # Used for Follow/UnFollow Post owner.
     def get_context_data(self, **kwargs):
@@ -108,6 +102,7 @@ class PostDetailView(DetailView):
             liked = True
         context['liked'] = liked
         context['follow'] = _foll
+        context['form_c'] = CommentForm()
         return context
 
 
@@ -256,3 +251,25 @@ class CommentListView(ListView):
 
 class CommentCreateView(CreateView):
     model = Comment
+    fields = '__all__'
+    # template_name = 'posts/post_detail.html'
+
+
+def comment_new(request):
+    form = CommentForm()
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            c1 = form.save(commit=False)
+            try:
+                request.user.is_authenticated
+                c1.writer = request.user
+            except:
+                return redirect(reverse('account:login'))
+            c1.comment_post = Post.objects.get(pk=request.POST['postpk'])
+            c1.save()
+            return redirect('posts:post', pk=request.POST['postpk'])
+        else:
+            return HttpResponse('ERROR, No Valid Form')
+    return render(request, 'posts:post', pk=request.POST['postpk'])
+
