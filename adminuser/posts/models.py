@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from datetime import datetime
+from django.utils import timezone
 from django.urls import reverse, reverse_lazy
 
 
@@ -11,12 +12,11 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
     text = models.CharField(max_length=255, default='Text for post...')
     image = models.ImageField(upload_to='post_images', blank=True, null=True)
-    created = models.DateTimeField(default=datetime.now())
+    created = models.DateTimeField(default=timezone.now)
     like = models.ManyToManyField(User, related_name='users')
 
     def total_like(self):
         return self.like.count()
-
 
     def __str__(self) -> str:
         return self.title + ' | ' + str(self.author.pk) + ' | ' + str(self.pk)
@@ -30,7 +30,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     text = models.CharField(max_length=256)
-    mes_created = models.DateTimeField(default=datetime.now())
+    mes_created = models.DateTimeField(default=timezone.now)
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 
