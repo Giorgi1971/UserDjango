@@ -1,8 +1,8 @@
 from email import message
+from multiprocessing import context
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
-from flask import request
 from .models import *
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -80,6 +80,17 @@ class ExampleListView2(LoginRequiredMixin, ListView):
         
         quer = comb.filter(phrase_q)
         return quer
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        qq = self.get_queryset()
+        num = qq.count()
+        # context['num'] = num
+        if 'phrase' in self.request.GET:
+            context['message'] = f'Find {num} items'
+        return context
+
+
 
 
 # Post detail page.
