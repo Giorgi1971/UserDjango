@@ -32,32 +32,9 @@
     Posts:
 </h3>
 
-{% for item in page_obj %}
+{% for post in page_obj %}
 
-<div class="card">
-    <div class="card-header text-secondary">
-        <a class="link-secondary text-decoration-none" href="{% url 'posts:post' item.pk %}">
-            <i> Title:</i><b> {{item}}.</b>
-        </a>
-        <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' item.author.pk %}">
-            <i> by </i> <b> {{item.author | title }}. </b>
-        </a>
-
-    </div>
-    <div class="card-body">
-
-        {% if item.image %}
-        <img class="card-img-top" src="{{ item.image.url }}" alt="Card image" style="width:50%">
-        {% endif %}
-
-        <p class="card-text">Text: {{item.text}}</p>
-
-    </div>
-    <div class="card-footer text-muted">
-        Created date: {{item.created}} ||| <b>{{item.author.follow.count}}</b> followers. 
-        <a class="btn btn-outline-success" href="{% url 'posts:post' item.pk %}"> {{ item.like.count }} likes</a>
-    </div>
-</div>
+{% include 'posts/_form.html' %}
 
 <hr class="collor:green p-2">
 

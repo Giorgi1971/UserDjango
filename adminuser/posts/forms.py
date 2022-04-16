@@ -12,8 +12,9 @@ class PostModelForm(forms.ModelForm):
         fields = ['title', 'text', 'image']
         widgets = {
             'title': Input(attrs={'class':"form-control", 'placeholder': 'Title'}),
-            'text': forms.Textarea(attrs={'class':"form-control", 'placeholder': 'Teext'}),
+            'text': forms.Textarea(attrs={'class':"form-control", 'placeholder': 'Write Text for Post...'}),
         }
+
 
     def save(self, commit=True):
         post = super().save(commit=False)

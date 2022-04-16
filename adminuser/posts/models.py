@@ -1,8 +1,6 @@
-from cgitb import text
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from datetime import datetime
 from django.utils import timezone
 from django.urls import reverse, reverse_lazy
 
@@ -10,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 class Post(models.Model):
     title = models.CharField(max_length=124)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author')
-    text = models.CharField(max_length=255, default='Text for post...')
+    text = models.CharField(max_length=255)
     image = models.ImageField(upload_to='post_images', blank=True, null=True)
     created = models.DateTimeField(default=timezone.now)
     like = models.ManyToManyField(User, related_name='users')

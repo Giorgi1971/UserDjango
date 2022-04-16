@@ -1,77 +1,63 @@
 {% extends 'account/base.html' %}
 
 {% block center %}
-<br>
-<h2>
-  Post detail Page:
-</h2>
-<p class="card-text">Author: {{ post.author }}</p>
-<!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
-{% if request.user != post.author %}
-{% if user.is_authenticated and follow %}
+  <br>
+  <h2>
+    Post detail Page:
+  </h2>
+  <p class="card-text">Author: {{ post.author }}</p>
+  <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
+  {% if request.user != post.author %}
 
-<form action="{% url 'posts:follow' post.author.pk %}" method="POST">
-  {% csrf_token %}
-  <input type="hidden" name="follow" value="{{post.author.pk}}">
-  <input class="btn btn-secondary" type="submit" value="Follow">
-</form>
+    {% if user.is_authenticated and follow %}
 
-{% elif user.is_authenticated %}
-<form action="{% url 'posts:unfollow' post.author.pk %}" method="POST">
-  {% csrf_token %}
-  <input type="hidden" name="follow" value="{{post.author.pk}}">
-  <input class="btn btn-secondary" type="submit" value="UnFollow">
-</form>
-{% endif %}
-{% endif %}
-<br>
-<div class="card">
-  <div class="card-header text-secondary">
-    <a class="link-secondary text-decoration-none" href="{% url 'posts:post' post.pk %}">
-      <i> Title:</i><b> {{post}}.</b>
-    </a>
-    <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' post.author.pk %}">
-      <i> by </i> <b> {{post.author | title }}. </b>
-    </a>
-  </div>
-  <div class="card-body">
+      <form action="{% url 'posts:follow' post.author.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="follow" value="{{post.author.pk}}">
+        <input class="btn btn-secondary" type="submit" value="Follow">
+      </form>
 
-    {% if post.image %}
-    <img class="card-img-top" src="{{ post.image.url }}" alt="Card image" style="width:50%">
+    {% elif user.is_authenticated %}
+
+      <form action="{% url 'posts:unfollow' post.author.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="follow" value="{{post.author.pk}}">
+        <input class="btn btn-secondary" type="submit" value="UnFollow">
+      </form>
+
     {% endif %}
 
-    <p class="card-text">Text: {{post.text}}</p>
+  {% endif %}
+  
+  <br>
+{% include 'posts/_form.html' %}
 
-  </div>
   <div class="card-footer text-muted">
-    Created date: {{post.created}} ||| <b>{{post.author.follow.count}}</b> followers.
     {% if liked %}
     <a class="btn btn-sm btn-outline-success" href="{% url 'posts:like' post.pk %}"> Like</a>
-    <i>likes={{post.like.count }}</i>
+    <i>{{post.like.count }} likes</i>
     {% else %}
     <a class="btn btn-sm btn-outline-danger" href="{% url 'posts:unlike' post.pk %}">Unlike</a>
-    <i>likes={{post.like.count }}</i>
+    <i>{{post.like.count }} likes</i>
     {% endif %}
   </div>
-</div>
+  <hr><hr><hr>
+  {% if request.user == post.author %}
+  <div class="container">
+    <p>
+      <a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
+      <a class="btn btn-warning" href="{% url 'posts:post_update' pk=post.pk %}">Update</a>
+    </p>
+  </div>
+  <hr class="collor:green p-2">
 
-<br>
-{% if request.user == post.author %}
-<div class="container">
-  <p>
-    <a class="btn btn-danger" href="{% url 'posts:post_delete' pk=post.pk %}">Delete</a>
-    <a class="btn btn-warning" href="{% url 'posts:post_update' pk=post.pk %}">Update</a>
-  </p>
-</div>
-<hr class="collor:green p-2">
+  {% endif %}
 
-{% endif %}
-
-{% if post.comments.all %}
-<h5 class="text-warning">
-  Comments:
-</h5>
-<table class="table table-striped table-hover">
+  {% if post.comments.all %}
+  <h5 class="text-warning">
+    Comments:
+  </h5>
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th scope="col">#</th>
@@ -81,7 +67,7 @@
       </tr>
     </thead>
     <tbody>
-    {% for i in post.comments.all %}
+      {% for i in post.comments.all %}
       <tr>
         <th scope="row">{{ forloop.counter }}</th>
         <td>{{i.text}} </td>
@@ -90,18 +76,17 @@
       </tr>
       {% endfor %}
     </tbody>
-</table>
-{% endif %}
-<h6>
-  Add commentt:
-</h6>
-<form action="{% url 'posts:comment_new' %}" method="POST">
-  {% csrf_token %}
-  <!-- <input type="text" placeholder="Add comment"> -->
-  <input type="hidden" name="postpk" value="{{ post.pk }}">
-  {{ form_c.as_p }}
-  <input type="submit" value="Comment">
-</form>
+  </table>
+  {% endif %}
+  <h6>
+    Add commentt:
+  </h6>
+  <form action="{% url 'posts:comment_new' %}" method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="postpk" value="{{ post.pk }}">
+    {{ form_c.as_p }}
+    <input type="submit" value="Comment">
+  </form>
 
 <!-- <a href="{% url 'posts:comment_new' %}">Create Comment</a> -->
 {% endblock %}
