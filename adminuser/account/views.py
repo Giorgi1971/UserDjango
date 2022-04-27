@@ -1,11 +1,9 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import redirect, render
-from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from .forms import *
-from django.contrib.auth import logout, authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 @login_required
@@ -16,7 +14,7 @@ def logout_view(request):
 
 def index(request):
     u_message = 'About'
-    return render(request, 'account/index.html', {'u_message':u_message})
+    return render(request, 'account/index.html', {'u_message': u_message})
 
 
 def login_user(request):
@@ -29,8 +27,8 @@ def login_user(request):
             login(request, user)
             return HttpResponseRedirect(reverse('posts:user_page'))
         else:
-            message = 'invalid crediantials'
-    return render(request, 'account/login.html', {'message':message})
+            message = 'invalid credentials'
+    return render(request, 'account/login.html', {'message': message})
 
 
 def register(request):
@@ -42,4 +40,4 @@ def register(request):
             user.save()
             return HttpResponseRedirect(reverse('account:login'))
 
-    return render(request, 'account/register.html', {'form':user_form})
+    return render(request, 'account/register.html', {'form': user_form})

@@ -3,7 +3,7 @@
         <a class="link-secondary text-decoration-none" href="{% url 'posts:post' post.pk %}">
             <i> Title:</i><b> {{post}}.</b>
         </a>
-        <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:followw' post.author.pk %}">
+        <a class="link-secondary text-decoration-none text-end" href="{% url 'posts:follow_w' post.author.pk %}">
             <i> by </i> <b> {{post.author | title }}. </b>
         </a>
 
