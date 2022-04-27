@@ -19,7 +19,7 @@
                     </h4>
                     {%endif%}
                     <br>
-                    <!-- ძებნის ღილაკი მომხმარებლების -->
+                    <!-- search button -->
                     <form class="d-flex" method="GET" action="{% url 'posts:posts' %}">
                         <input class="form-control me-2" type="search" name="u_search" value="{{ request.GET.u_search }}"
                             placeholder="Search in Users" aria-label="Search">
@@ -38,12 +38,12 @@
                         <a class="list-group-item list-group-item-action" href="#"> {{ u.username }}
                             <p>
 
-                                <a class="list-group-item list-group-item-action" href="#"> {{ u.author.all }}
+                                <a class="list-group-item list-group-item-action" href="#"> {{ u.author.all }}</a>
                             </p>
                                 <form class="d-inline-block" action="{% url 'posts:follow' u.pk %}" method="POST">
                                 {% csrf_token %}
                                 <input type="hidden" name="follow" value="{{ u.pk }}">
-                                <!-- აქ გვინდა რომ follow/unfollow მუშაობდეს -->
+                                <!-- follow/unfollow -->
                                 <input class="btn btn-sm btn-secondary" type="submit" value="Follow">
                             </form>
                         </a>

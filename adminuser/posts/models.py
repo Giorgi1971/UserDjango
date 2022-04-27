@@ -1,8 +1,7 @@
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.utils import timezone
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse
 
 
 class Post(models.Model):
@@ -32,7 +31,8 @@ class Comment(models.Model):
     writer = models.ForeignKey(User, on_delete=models.CASCADE)
     comment_post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
 
-    def get_absolute_url(self):
+    @staticmethod
+    def get_absolute_url():
         return reverse("posts:posts")
 
 
@@ -43,16 +43,16 @@ class Twitter(models.Model):
     class Meta:
         unique_together = [['follow', 'followed']]
 
-    def get_absolute_url(self):
+    @staticmethod
+    def get_absolute_url():
         return reverse('posts:posts')
 
     def __str__(self) -> str:
         return str(self.follow.pk)+' - '+str(self.followed.pk)
 
-    # ეს ქვედა ორი ხაზის გაკეთება უნდა ვცადო. ანუ ვიუს ფუნქციები follow_user და unfollow აქ გადმოვიდეს.
+    # Must try to do this two line with view function - follow_user and unfollow get here.
     def following(self):
         Twitter(self.follow, self.followed).save()
 
     def unfollowing(self):
         Twitter(self.follow, self.followed).delete()
-

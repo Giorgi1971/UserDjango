@@ -6,22 +6,20 @@
 
 
 <div class="row">
-    <!-- აქ სიმბოლურად ვსვავ პოსტის დამატების ღილაკს, სადაც დაგჭირდება იქ გამოვიყენებთ.
-    ეს ღილაკი გამოუჩნდებათ მარტო მენტორებს, ანუ ვინც იქნება is_staff სტატუსით -->
-    <center style="margin: auto;">
+    <div style="margin: auto;">
         {% if user.is_authenticated %}
         <br>
         <a class="btn btn-secondary px-5" href="{% url 'posts:post_add' %}"><b> Create new Post ... </b></a>
         <br>
         {% endif %}
         <br>
-        <!--------------------------------------ძებნის ღილაკი, თუ გვჭირება, თუ არადა წავშალოთ------------------------------------------------------------>
+        <!------------------------------------- search button ----------------------------------------------------------->
         <form class="d-flex" method="get" action="{% url 'posts:posts' %}">
             <input class="form-control me-2" type="search" name="phrase" value="{{ request.GET.phrase }}"
                 placeholder="Search in Posts" aria-label="Search">
             <button class="btn btn-outline-success create-button" type="submit" name="action">Search</button>
         </form>
-    </center>
+    </div>
 </div>
 <br>
 
@@ -36,7 +34,7 @@
 
 {% include 'posts/_form.html' %}
 
-<hr class="collor:green p-2">
+<hr class="color:green p-2">
 
 {%endfor%}
 

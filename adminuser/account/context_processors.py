@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db.models import *
 
+
 def users_links(request):
     u_message = ''
     if request.method == 'GET':

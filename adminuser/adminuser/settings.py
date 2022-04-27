@@ -117,7 +117,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-LOGIN_URL="/user/login/"
+LOGIN_URL = "/user/login/"
 LOGIN_REDIRECT_URL = BASE_DIR / 'account/index'
 
 # Static files (CSS, JavaScript, Images)
@@ -131,9 +131,9 @@ STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
 
-MEDIA_ROOT = 'media'
 MEDIA_URL = '/media/'
 
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

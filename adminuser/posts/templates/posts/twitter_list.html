@@ -13,7 +13,7 @@
 {% for tt in twitter_list %}
     <div class="author-div">
         <i class="bi bi-person-circle"></i>
-        <a href="{% url 'posts:followw' tt.follow.pk %}">
+        <a href="{% url 'posts:follow_w' tt.follow.pk %}">
             username {{ tt.follow }} - {{  tt.follow.pk }} 
         </a> 
         <a href="{% url 'posts:unfollow' tt.follow.pk %}" class="single-category btn btn-warning">
@@ -31,7 +31,7 @@
 </h3>
 <br>
 <h5>
-    Go to Posts page and follow intristing peoples.
+    Go to Posts page and follow interesting peoples.
 </h5>
 {%endif%}
 
