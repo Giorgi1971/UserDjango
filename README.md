@@ -31,6 +31,6 @@
 * class SignUp(CreateView):
 
 ## For pushin need token?
-github - settings - Developers settings - Personal accsess token
-generate new token or take existing (with unexpired date)
-use instead password...
+* github - settings - Developers settings - Personal accsess token
+* generate new token or take existing (with unexpired date)
+* use instead password...
