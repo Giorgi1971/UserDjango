@@ -20,7 +20,9 @@
 * python manage.py runserver
 
 
-
+### news:
+* django.contrib.humanize (for "25 minutes ago")
+* 
 # 
 # This is for useradmin
 
