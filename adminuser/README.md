@@ -1,22 +1,22 @@
-This is a Twitter clone
-This project corresponds to the youtube tutorial:
-To use/configure it:
-Clone the repository or download it as a zip.
+# This is a Twitter clone
+## This project corresponds to the youtube tutorial:
+### To use/configure it:
+1. Clone the repository or download it as a zip.
 git clone https://github.com/mundo-python/social_project.git
 
-Create a virtual environment
+2. Create a virtual environment
 python -m venv socialenv
 
-Install dependencies/libraries in requirements.txt
+3. Install dependencies/libraries in requirements.txt
 pip install -r requirements.txt
 
-Run the migrations.
+4. Run the migrations.
 python manage.py makemigrations python manage.py migrate
 
-Create a super user.
+5. Create a super user.
 python manage.py createsuperuser
 
-Run the server.
+6. Run the server.
 python manage.py runserver
 
 
