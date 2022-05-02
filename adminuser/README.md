@@ -1,4 +1,28 @@
-This is for useradmin
+This is a Twitter clone
+This project corresponds to the youtube tutorial:
+To use/configure it:
+Clone the repository or download it as a zip.
+git clone https://github.com/mundo-python/social_project.git
+
+Create a virtual environment
+python -m venv socialenv
+
+Install dependencies/libraries in requirements.txt
+pip install -r requirements.txt
+
+Run the migrations.
+python manage.py makemigrations python manage.py migrate
+
+Create a super user.
+python manage.py createsuperuser
+
+Run the server.
+python manage.py runserver
+
+
+
+
+#This is for useradmin
 
 We dont create User class. Only if necessary take it - from django.contrib.auth.models import User.
 password save in 
