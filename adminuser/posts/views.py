@@ -1,9 +1,7 @@
-from email import message
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_list_or_404, get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from .models import *
-from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.urls import reverse_lazy, reverse
 from .forms import *
@@ -41,6 +39,7 @@ class UserPageListView(LoginRequiredMixin, ListView):
 class ExampleListView(LoginRequiredMixin, ListView):
     context_object_name = 'list'
     template_name = 'posts/example.html'
+
     def get_queryset(self):
         qf = Twitter.objects.filter(followed=self.request.user)
         tt = []
@@ -48,9 +47,9 @@ class ExampleListView(LoginRequiredMixin, ListView):
             p = i.follow.author.all()
             tt.extend(p)
         tk = [i.pk for i in tt]
-        querset = Post.objects.filter(id__in=tk).order_by('?')
+        queryset = Post.objects.filter(id__in=tk).order_by('?')
 
-        return querset
+        return queryset
 
 
 # First follow posts, then other. with search and create post
@@ -77,8 +76,8 @@ class ExampleListView2(LoginRequiredMixin, ListView):
         if q:
             phrase_q &= (Q(title__icontains=q) | Q(text__icontains=q) | Q(title__icontains=q))
         
-        quer = comb.filter(phrase_q)
-        return quer
+        cont = comb.filter(phrase_q)
+        return cont
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -88,8 +87,6 @@ class ExampleListView2(LoginRequiredMixin, ListView):
         if 'phrase' in self.request.GET:
             context['message'] = f'Find {num} items'
         return context
-
-
 
 
 # Post detail page.
@@ -103,7 +100,7 @@ class PostDetailView(DetailView):
         try:
             Twitter.objects.get(follow=self.object.author, followed=self.request.user)
             _foll = False
-        except:
+        except Twitter.DoesNotExist:
             _foll = True
         p1 = Post.objects.get(pk=self.object.pk)
         if p1.like.filter(pk=self.request.user.id).exists():
@@ -167,7 +164,7 @@ def follow_user(request, pk):
         f1.save()
         message = f'You ({follower}) follow {follow}.'
     # return HttpResponseRedirect(reverse('posts:posts'))  ამითი უნდა ვცადო გაკეთება
-    return render(request, 'posts/post_list.html', {'page_obj':post_list, 'message':message})
+    return render(request, 'posts/post_list.html', {'page_obj': post_list, 'message': message})
 
 
 # Maybe this must Delete???? follow without Form, with <a> tag 
@@ -175,7 +172,7 @@ def followw_user(request, pk):
     message = ''
     post_list = Post.objects.filter(author__pk=pk).order_by()
 
-    return render(request, 'posts/post_list.html', {'page_obj':post_list, 'message':message})
+    return render(request, 'posts/post_list.html', {'page_obj': post_list, 'message': message})
 
 
 # Search in User's class. Find and follow user.
@@ -223,7 +220,7 @@ def post_add(request):
                 # კარგია თუ დამამახსოვრდება, სხვა დროსაც დამჭირდება
                 # form.save_m2m()
                 return redirect(reverse("posts:posts"))
-    return render(request, 'posts/post_form.html', {'form':form,'formc':formc})
+    return render(request, 'posts/post_form.html', {'form': form, 'formc': formc})
 
 
 # ToDo. Can't pass request user. maybe def save, with request user
@@ -252,7 +249,7 @@ def like(request, pk):
         p1.like.add(p2)
     else:
         p1.like.remove(p2)
-    return HttpResponseRedirect(reverse('posts:post', kwargs={'pk':pk}))
+    return HttpResponseRedirect(reverse('posts:post', kwargs={'pk': pk}))
 
 
 class CommentListView(ListView):
@@ -274,12 +271,12 @@ def comment_new(request):
             try:
                 request.user.is_authenticated
                 c1.writer = request.user
-            except:
+            except User.DoesNotExist:
                 return redirect(reverse('account:login'))
             c1.comment_post = Post.objects.get(pk=request.POST['postpk'])
             c1.save()
             return redirect('posts:post', pk=request.POST['postpk'])
         else:
             return HttpResponse('ERROR, No Valid Form')
-    return render(request, 'posts:post', pk=request.POST['postpk'])
 
+    return render(request, 'posts/post_list.html', {'form': form})
