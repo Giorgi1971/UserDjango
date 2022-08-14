@@ -1,3 +1,6 @@
+# OneToOne - მუშაობს რეგისტრაცია, ავტორიზაცია.
+
+
 # UserDjango
 
 # User class
